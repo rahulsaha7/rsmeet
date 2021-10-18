@@ -1,0 +1,29 @@
+
+
+.usernameHolder,.passwordHolder,.signInButton{
+    
+
+    background: linear-gradient(265.52deg, rgba(0, 31, 70, 0.7) 0%, rgba(6, 38, 77, 0.573125) 13.85%, rgba(28, 63, 103, 0.1) 100%);
+border-radius: 40px;
+}
+
+.usernameHolder input ,.passwordHolder input {
+    outline: none;
+    border: none !important;
+    background: none !important;
+}
+.usernameHolder input::placeholder ,.passwordHolder input::placeholder {
+    color: white;
+}
+
+ .form-control:focus{
+    
+    outline:0;
+    -webkit-box-shadow:none;
+    box-shadow:none;
+}
+
+.signInButton {
+    width: auto;
+    border: none;
+}

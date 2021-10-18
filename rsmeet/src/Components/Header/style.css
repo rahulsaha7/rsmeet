@@ -1,0 +1,12 @@
+/* Header file css */
+
+.logoLogin img{
+    height: 100%;
+    width: 100%;
+}
+
+.SigninBanner {
+    width: 100%;
+    background: linear-gradient(268.22deg, rgba(123, 135, 149, 0.371184) 0%, #001F46 0%, rgba(140, 149, 160, 0.286016) 0%, rgba(170, 174, 179, 0.131629) 29.4%, rgba(196, 196, 196, 0) 50.82%);
+border-radius: 40px;
+}

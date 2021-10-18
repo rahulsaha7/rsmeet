@@ -1,0 +1,30 @@
+.background {
+    height: 100vh;
+    width: 100vw;
+    background-repeat:round;
+    background-size: cover;
+}
+
+.home-view{
+    width: auto;
+height: auto;
+   
+    mix-blend-mode: normal;
+    box-shadow: 0px 5px 60px 8px rgba(0, 0, 0, 0.25);
+    padding: 2em;
+   
+    /* filter: blur(5px); */
+    border-radius: 40px;
+}
+/* If backdrop filter supports then use it  */
+    @supports((-webkit-backdrop-filter: none;) or (backdrop-filter: none;)){
+            .home-view{
+                background: linear-gradient(226.55deg, rgba(0, 32, 71, 0.49) 0%, rgba(8, 38, 76, 0.091) 26.77%, rgba(28, 63, 103, 0) 100%);
+                backdrop-filter: blur(60px);
+                -webkit-backdrop-filter: blur(60px);
+            }
+    }
+/* else use transparent background  */
+.home-view{
+    background: linear-gradient(226.55deg, rgba(0, 32, 71, 0.9) 0%, rgba(8, 38, 76, 0.091) 26.77%, rgba(28, 63, 103, 0) 100%);
+}

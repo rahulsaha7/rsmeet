@@ -1,0 +1,49 @@
+.logoHolder{
+    height: 200px;
+    width: 200px;
+}
+
+.logoHolder img{
+    height: 100%;
+    width: 100%;
+}
+
+.title{
+    width: auto;
+    height: auto;
+    background: linear-gradient(264.31deg, #001F46 0%, rgba(182, 184, 187, 0.0731758) 0%, rgba(138, 147, 159, 0.294945) 1.39%, rgba(171, 175, 180, 0.125292) 6.65%, rgba(196, 196, 196, 0) 37.19%); 
+    border-radius: 40px;
+}
+
+.title h3,h4{
+    color: white;
+    font-weight: 200;
+font-size: 30px;
+line-height: 42px;
+letter-spacing: 0.05em; 
+}
+
+.homeButton{
+    background: linear-gradient(265.52deg, rgba(0, 31, 70, 0.7) 0%, rgba(6, 38, 77, 0.573125) 13.85%, rgba(28, 63, 103, 0.1) 100%);
+border-radius: 40px;
+}
+
+.homeButton h5{
+    color: white;
+}
+
+/* General Css */
+
+p{
+    color: white;
+}
+a{
+    color: white;
+    text-decoration: none;
+}
+a:hover{
+    color:blue;
+    text-decoration: underline;
+
+}
+

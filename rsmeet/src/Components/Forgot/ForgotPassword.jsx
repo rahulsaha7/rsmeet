@@ -11,7 +11,7 @@ const ForgotPassword = () => {
         <>
             <Header haderTitle='Forgot Password' height='100px' width='100px' />
 
-            <form action="">
+            <form action="" method="POST">
 
                 <section className=" mt-3">
                     <label className="form-label" htmlFor="username">username</label>

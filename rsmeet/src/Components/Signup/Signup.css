@@ -1,0 +1,11 @@
+button.signInButton:disabled,
+button.signInButton[disabled]{
+  /* border: 1px solid #575757; */
+  background-color: #424242;
+  color: #424242;
+}
+
+button.signInButton:enabled,
+button.signInButton[enabled]{
+    background: linear-gradient(265.52deg, rgba(0, 31, 70, 0.7) 0%, rgba(6, 38, 77, 0.573125) 13.85%, rgba(28, 63, 103, 0.1) 100%) !important;
+}

@@ -8,6 +8,7 @@ const regSchema = new mongoose.Schema({
     email:{type:String,required:true},
     phone:{type: String,required:true},
     password:{type:String,required:true},
+    mailVerified:{type:Boolean,required:true},
     date : {type: Number , default:Date.now()}
 },{collection:'Auth'});
 
@@ -16,7 +17,7 @@ const regSchema = new mongoose.Schema({
 
 const userExists = new mongoose.Schema({
     email:{type:String}
-});
+},{collection:'Auth'});
 
 const register = mongoose.model('reg',regSchema);
 const dupUser = new mongoose.model('dup',userExists);

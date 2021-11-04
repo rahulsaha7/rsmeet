@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Schemas = require('../db/dbSchemas');
+const jwt = require('jsonwebtoken');
+const { response } = require('express');
 
 mongoose.connect('mongodb://localhost/chatApplication');
 
@@ -18,6 +20,7 @@ const Register = async (nameUSER, email, phone, password) => {
     let error = false;
     let message;
     let result;
+    let token = "";
 
 
 
@@ -38,15 +41,21 @@ const Register = async (nameUSER, email, phone, password) => {
                 name: nameUSER,
                 email: email,
                 phone: phone,
-                password: hashp,
-                mailVerified:false
+                password: hashp
             };
 
 
             const respone = await Schemas.schemaA.register.create(regDetails);
 
             message = 'Registration Successfull';
+            token = jwt.sign({ sub: 'Auth JWT', 'auth': true, 'userID': id, 'verified': false, "username": "none" },'authJWT',{ algorithm: 'HS256' });
+            response.cookie('jwtAuth', token, {
+                maxAge: 24 * 60 * 60 * 1000,
+                httpOnly: true
+            });
+            //Create a file in users by unique user id 
             //data will be taoken with user id, image, username
+            //but now let's create a token
         }
     } catch (err) {
 
@@ -56,6 +65,7 @@ const Register = async (nameUSER, email, phone, password) => {
             'status': status,
             'error': error,
             'exist': exist,
+            'token': token,
             'Message': message
         }
         return result;
@@ -65,3 +75,14 @@ const Register = async (nameUSER, email, phone, password) => {
 };
 
 module.exports.regis = Register;
+
+
+//0ERaAydX2j
+//CkPmhRmMuU
+
+
+
+// defined('DB_HOST')? NULL : define('DB_HOST','https://remotemysql.com');
+// defined('DB_USER')? NULL : define('DB_USER','0ERaAydX2j');
+// defined('DB_PASS')? NULL : define('DB_PASS','CkPmhRmMuU');
+// defined('DB_NAME')? NULL : define('DB_NAME','0ERaAydX2j');

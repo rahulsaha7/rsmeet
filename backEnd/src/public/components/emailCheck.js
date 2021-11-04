@@ -21,11 +21,10 @@ const emailCheck = async (email) =>{
         const docs = await Schemas.schemaA.dupUser.find({email:email});    
         if(docs.length){
             message = "email already exist";
-                exist = true;
+            exist = true;
         }else{
             message = "email not exist";
             exist = false;
-            
         }
 
     }catch(err){

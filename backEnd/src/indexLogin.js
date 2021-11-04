@@ -4,8 +4,10 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const Router = express.Router();
 const reg = require('./public/components/Reg');
+const login = require('./public/components/login');
 const EmailCheck = require('./public/components/emailCheck');
 const multer = require('multer');
+const nodemailer = require('nodemailer');
 
 
 const imageStorage = multer.diskStorage({
@@ -38,9 +40,27 @@ const imageUpload = multer({
 
 
 
-Router.post('/', (req, res) => {
+Router.post('/',imageUpload.none(), (req, res) => {
 
   //If login is called then login will be called
+
+  let data = JSON.parse(JSON.stringify(req.body));
+
+
+  
+
+  let {email,password} = data;
+
+
+  login.loginFunc(email,password).then((output)=>{
+    console.log(output);
+    res.json(output);
+
+  }).catch((error)=>{
+      res.send(error);
+  })
+
+
 
 });
 
@@ -100,6 +120,80 @@ Router.post('/check', imageUpload.none(), (req, res) => {
       'Emessage': error.message
     })
   })
+});
+
+Router.post('/authCred',imageUpload.none(),(req,res)=>{
+ let status = true;
+ let data = false;
+ let cookie = false;
+ if(req.cookies){
+    cookie = true;
+    data = req.cookies;
+}
+
+res.json({
+  'status' : status,
+  'data':data,
+  'cookie':cookie
+})
+
+});
+
+
+Router.post('/sendMail',imageUpload.none(),(req,res)=>{
+
+
+  let data = JSON.parse(JSON.stringify(req.body));
+ let {email} = data;
+
+ console.log(email);
+
+ let status = true;
+ let error = false;
+ let message='mail will be sent if mail id exist';
+
+ //But before intializing this, lets check whether mail exist or not 
+
+
+EmailCheck.Echeck(email).then((output)=>{
+  
+  if(output.exist){
+    const transporter = nodemailer.createTransport({
+      port : 465,
+      host : 'smtp.gmail.com',
+      auth : {
+        user : 'rsahagdrive@gmail.com',
+        pass : 'shinchan7242', 
+      },
+      secure : true,
+   });
+  
+   const mailData = {
+     from : 'rsahagdrive@gmail.com',
+     to : email,
+     subject : 'testing mail services using nodemailer',
+     text : 'Lets see what happens',
+     html : '<b>Link for forgot password</b> <a herf = "#"> link will be here </a>',
+   };
+
+   transporter.sendMail(mailData);
+   
+
+  }
+}).catch((error)=>{
+  error = true;
+  message = err.message;
+})
+
+console.log(message);
+
+  res.json({
+            'status':status,
+            'error':error,
+            'message':message
+   });
+
+
 });
 
 

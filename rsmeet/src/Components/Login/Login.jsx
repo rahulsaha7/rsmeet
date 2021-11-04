@@ -7,22 +7,9 @@ import Header from '../Header/Header';
 import { AiFillEye } from 'react-icons/ai';
 import './Login.css';
 
-const Login = ({loginApi}) => {
+const Login = ({LoginData,setLoginData,LoginForm}) => {
     
     const [viewPass, setviewPass] = useState('password');
-    const [LoginData, setLoginData] = useState({
-            username:"",
-            password:"",
-    })
-
-
-    const LoginForm = (e) =>{
-
-        e.preventDefault();
-        loginApi(LoginData);
-        setLoginData({username:"",password:""});
-
-    }
 
   
 
@@ -38,7 +25,17 @@ const Login = ({loginApi}) => {
             <label className="form-label" htmlFor="username">username</label>
                <div className="usernameHolder p-3 d-flex justify-content-center">
                    {/* This restriction should in register page but I am cheking here only  */}
-                <input className="form-control"  type="text" name="userName" id="username" placeholder="username" value={LoginData.username}     autoComplete="off"  onInvalid={(e) =>{e.target.setCustomValidity('Enter username')}} autoComplete="off" required=" " onChange ={(event)=>setLoginData({...LoginData,username:event.target.value})} />
+                <input className="form-control"  
+                type="email" 
+                name="userName" 
+                id="username" 
+                placeholder="username or email" 
+                value={LoginData.username}
+                autoComplete="off"  
+                onInput = {(e)=>{e.target.setCustomValidity('')}}
+                onInvalid={(e) =>{e.target.setCustomValidity('Enter username or Email')}} 
+                required=" " 
+                onChange ={(event)=>setLoginData({...LoginData,username:event.target.value})} />
 
                </div>
 
@@ -50,8 +47,25 @@ const Login = ({loginApi}) => {
             <label className="form-label" htmlFor="password">password</label>
             <div className="passwordHolder p-3 d-flex justify-content-center">
 
-                <input className="form-control" type={viewPass} name="password" id="password" value={LoginData.password} placeholder="password" autoComplete="off" required=" "  onInvalid = {(e)=>{e.target.setCustomValidity('Enter Password')}} onChange ={(event)=>setLoginData({...LoginData,password:event.target.value})} />
-                <span style={{color:"white",alignSelf: "center"}} onClick = {()=>{viewPass === 'password' ? setviewPass('text'):setviewPass('password')}}> <AiFillEye /> </span>
+                <input 
+                className="form-control" 
+                type={viewPass} 
+                name="password" 
+                id="password" 
+                value={LoginData.password} 
+                placeholder="password" 
+                autoComplete="off" 
+                required=" "  
+                onInput = {(e)=>{e.target.setCustomValidity('')}}
+                onInvalid = {(e)=>{e.target.setCustomValidity('Enter Password')}} 
+                onChange ={(event)=>setLoginData({...LoginData,password:event.target.value})} />
+
+                <span 
+                style={{
+                color:"white",
+                alignSelf: "center"
+                }} 
+                onClick = {()=>{viewPass === 'password' ? setviewPass('text'):setviewPass('password')}}> <AiFillEye /> </span>
 
             </div>
             </section>
@@ -59,7 +73,11 @@ const Login = ({loginApi}) => {
             
                
             <section className="w-100 " style={{textAlign:"center"}}>
-               <button  className="py-2 px-3 signInButton mt-3" type="submit"> <span style={{color:"white"}}> Sign In </span> </button>
+               <button  
+               className="py-2 px-3 signInButton mt-3" 
+               type="submit"> 
+               <span style={{color:"white"}}> Sign In </span> 
+               </button>
 
             </section>
 

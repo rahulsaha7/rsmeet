@@ -1,6 +1,7 @@
 const path = require('path');
 const process = require('process')
 const app = require('express');
+const cookieParser = require('cookie-parser');
 const express = app();
 //const bodyParser = require('body-parser');
 var cors = require('cors');
@@ -16,6 +17,7 @@ const login = require('./src/indexLogin');
 
 const port = process.env.PORT || 9000
 express.use(cors({credentials: true, origin: true}));
+express.use(cookieParser());
 
 
 // express.use(bodyParser.urlencoded({extended:true}));

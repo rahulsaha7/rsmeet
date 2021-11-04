@@ -8,7 +8,9 @@ const regSchema = new mongoose.Schema({
     email:{type:String,required:true},
     phone:{type: String,required:true},
     password:{type:String,required:true},
-    mailVerified:{type:Boolean,required:true},
+    mailVerified:{type:Boolean,required:true,default:false},
+    username:{type:String,required:true,default:" "},
+    image : {type:String,required:true,default:" "},
     date : {type: Number , default:Date.now()}
 },{collection:'Auth'});
 

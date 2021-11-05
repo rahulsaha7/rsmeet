@@ -4,6 +4,7 @@ import GetStarted from "../GetStarted/GetStarted";
 import Login from "../Login/Login";
 import ForgotPassword from "../Forgot/ForgotPassword";
 import Signup from "../Signup/Signup";
+import MailVerify from "../Verify/MailVerify";
 import ProfileSet from "../ProfileSet/ProfileSet";
 import ErrorPage from "../Error/ErrorPage";
 import BlankDp from "../../Assets/image/blankDp.png";
@@ -182,6 +183,10 @@ const Home = ({ backImage }) => {
                   />
                 )}
               ></Route>
+
+              <Route exact path = '/verify-mail' component = {MailVerify} />
+
+              
 
               <Route
                 exact

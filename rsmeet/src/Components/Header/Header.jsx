@@ -6,7 +6,7 @@ import './style.css';
 const Header = ({ haderTitle, height, width }) => {
     return (
         <>
-            <section className="d-flex flex-sm-row flex-column">
+            <section className="d-flex flex-sm-row flex-column justify-content-sm-center align-items-center align-items-center h-100 w-100">
 
                 <figure className="logoLogin " style={{
                     height: `${height}`,

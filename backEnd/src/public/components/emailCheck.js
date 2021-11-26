@@ -10,6 +10,7 @@ const emailCheck = async (email) =>{
     let exist = false;
     let error = false;
     let message;
+    let data = null;
     let result;
 
 
@@ -21,6 +22,7 @@ const emailCheck = async (email) =>{
         const docs = await Schemas.schemaA.dupUser.find({email:email});    
         if(docs.length){
             message = "email already exist";
+            data = docs;
             exist = true;
         }else{
             message = "email not exist";
@@ -35,7 +37,8 @@ const emailCheck = async (email) =>{
             'status':status,
             'exist':exist,
             'error':error,
-            'message':message
+            'message':message,
+            'data':data[0].id
         };
         return result;
     }

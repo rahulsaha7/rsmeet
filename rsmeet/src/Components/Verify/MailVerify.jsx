@@ -1,9 +1,14 @@
-import React from "react";
+import React,{useState} from "react";
 import Header from "../Header/Header";
 
-const MailVerify = () => {
+const MailVerify = ({handleVerifyEmail,verifyEmailData,setverifyEmailData}) => {
+
+  
+
+  
+
   return (
-    <>
+    <div className="p-4">
       <Header haderTitle="Mail Verification" height="100px" width="100px" />
 
       <main>
@@ -17,12 +22,15 @@ const MailVerify = () => {
                 color: "rgb(62, 236, 90)",
               }}
             >
-              example@gmail.com
+              {verifyEmailData.email}
             </b>
           </span>
         </section>
 
-        <section className="d-flex flex-row flex-wrap mt-5">
+        <form action="" method="post" onSubmit={(e)=>handleVerifyEmail(e)} >
+
+        <section className="d-flex flex-row flex-wrap mt-5 justify-content-center">
+        
           <div
             className="usernameHolder me-3  input-group justify-content-center align-items-center"
             style={{ width: "60px", borderRadius: "15px" }}
@@ -30,16 +38,13 @@ const MailVerify = () => {
             <input
               className="form-control text-center"
               type="text"
-              name="email"
-              id="forgot-email"
-              required=""
+              name="digit1"
+              required
+              value = {verifyEmailData.digit1}
+              maxLength = '1'
               autoComplete="off"
-              onInput={(e) => {
-                e.target.setCustomValidity("");
-              }}
-              onInvalid={(e) => {
-                e.target.setCustomValidity("Must not be empty");
-              }}
+              
+              onChange = {(e)=>{setverifyEmailData({...verifyEmailData,digit1:e.target.value})}}
             />
           </div>
 
@@ -50,16 +55,14 @@ const MailVerify = () => {
             <input
               className="form-control text-center"
               type="text"
-              name="email"
-              id="forgot-email"
-              required=""
+              name="digit2"
+             
+              required
+              value = {verifyEmailData.digit2}
+              maxLength = '1'
               autoComplete="off"
-              onInput={(e) => {
-                e.target.setCustomValidity("");
-              }}
-              onInvalid={(e) => {
-                e.target.setCustomValidity("Must not be empty");
-              }}
+             
+              onChange = {(e)=>{setverifyEmailData({...verifyEmailData,digit2:e.target.value})}}
             />
           </div>
           <div
@@ -69,16 +72,15 @@ const MailVerify = () => {
             <input
               className="form-control text-center"
               type="text"
-              name="email"
+              name="digit3"
+              value = {verifyEmailData.digit3}
               id="forgot-email"
-              required=""
+              required
+              maxLength="1"
               autoComplete="off"
-              onInput={(e) => {
-                e.target.setCustomValidity("");
-              }}
-              onInvalid={(e) => {
-                e.target.setCustomValidity("Must not be empty");
-              }}
+             
+             
+              onChange = {(e)=>{setverifyEmailData({...verifyEmailData,digit3:e.target.value})}}
             />
           </div>
 
@@ -89,16 +91,15 @@ const MailVerify = () => {
             <input
               className="form-control text-center"
               type="text"
-              name="email"
+              name="digit4"
               id="forgot-email"
-              required=""
+              required
+              maxLength="1"
+              value = {verifyEmailData.digit4}
               autoComplete="off"
-              onInput={(e) => {
-                e.target.setCustomValidity("");
-              }}
-              onInvalid={(e) => {
-                e.target.setCustomValidity("Must not be empty");
-              }}
+             
+              
+              onChange = {(e)=>{setverifyEmailData({...verifyEmailData,digit4:e.target.value})}}
             />
           </div>
 
@@ -109,16 +110,15 @@ const MailVerify = () => {
             <input
               className="form-control text-center"
               type="text"
-              name="email"
+              name="digit5"
               id="forgot-email"
-              required=""
+              required
+              maxLength="1"
+              value = {verifyEmailData.digit5}
               autoComplete="off"
-              onInput={(e) => {
-                e.target.setCustomValidity("");
-              }}
-              onInvalid={(e) => {
-                e.target.setCustomValidity("Must not be empty");
-              }}
+             
+             
+              onChange = {(e)=>{setverifyEmailData({...verifyEmailData,digit5:e.target.value})}}
             />
           </div>
 
@@ -129,33 +129,38 @@ const MailVerify = () => {
             <input
               className="form-control text-center"
               type="text"
-              name="email"
+              name="digit6"
               id="forgot-email"
-              required=""
+              required
+              maxLength="1"
+              value = {verifyEmailData.digit6}
               autoComplete="off"
-              onInput={(e) => {
-                e.target.setCustomValidity("");
-              }}
-              onInvalid={(e) => {
-                e.target.setCustomValidity("Must not be empty");
-              }}
+              
+              onChange = {(e)=>{setverifyEmailData({...verifyEmailData,digit6:e.target.value})}}
             />
           </div>
+
+          <section className="w-100 " style={{ textAlign: "center" }}>
+          <button
+            className="py-2 px-3 signInButton mt-3"
+            type="submit"
+          >
+            <span style={{ color: "white" }}> Verify </span>
+          </button>
         </section>
 
-        <div class="text-center mt-5">
-          <span class="d-block mobile-text">Don't receive the code?</span>
-          <span
-            class="font-weight-bold cursor"
-            style={{
-              color: "rgb(62, 236, 90)",
-            }}
-          >
-            Resend
-          </span>
-        </div>
+
+        <span style={{ color: "red",display:verifyEmailData.display }}> {verifyEmailData.message} </span>
+
+          
+        </section>
+
+        </form>
+
+
+       
       </main>
-    </>
+    </div>
   );
 };
 

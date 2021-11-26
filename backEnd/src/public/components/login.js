@@ -13,11 +13,12 @@ const login = async (email,password) =>{
     let status = true;
     let exist = true;
     let error = false;
+
     let message;
     let result;
     let token="";
 
-    console.log(password);
+ 
 
 
     try {
@@ -32,7 +33,7 @@ const login = async (email,password) =>{
 
             
 
-            let {_id,username,mailVerfied,image} = docs[0];
+            let {_id,username,mailVerified,image} = docs[0];
 
             
             let hash = docs[0].password;
@@ -43,9 +44,9 @@ const login = async (email,password) =>{
                 
                 //Create a jwt token
 
-                
 
-                token = jwt.sign({ sub: 'Auth JWT', 'auth': true, 'userID': _id, 'verified': mailVerfied, "username": username, 'image' : image },'authJWT',{ algorithm: 'HS256' });
+
+                token = jwt.sign({ sub: 'Auth JWT', 'auth': true, 'userID': _id, 'verified': mailVerified, "username": username, 'image' : image },"authJWT",{ algorithm: 'HS256',expiresIn:"1d" });
 
                 message = "Login Successfull";
 

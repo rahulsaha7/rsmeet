@@ -43,7 +43,7 @@ const Signup = ({ regData, setregData, handleRegSubmit,getApiData }) => {
   };
 
   return (
-    <>
+    <div className="p-4">
       <Header haderTitle="Signup Here" height="100px" width="100px" />
       <form
         className="w-100"
@@ -171,7 +171,8 @@ const Signup = ({ regData, setregData, handleRegSubmit,getApiData }) => {
               }}
               autoComplete="off"
               required=" "
-              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^\*])(?.={8,})"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^\*]).{8,}"
+              
               onInvalid={(e) => {
                 e.target.setCustomValidity("Please enter correct combination");
               }}
@@ -237,7 +238,7 @@ const Signup = ({ regData, setregData, handleRegSubmit,getApiData }) => {
               }}
               placeholder="Match Password"
               autoComplete="off"
-              pattern="^(?=.*[a-z](?=.*[A-Z])(?=.*[0-9])(?.{5,}))"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^\*]).{8,}"
               onInvalid={(e) => {
                 e.target.setCustomValidity("Please enter correct combination");
               }}
@@ -268,7 +269,7 @@ const Signup = ({ regData, setregData, handleRegSubmit,getApiData }) => {
           Signin
         </Link>
       </p>
-    </>
+    </div>
   );
 };
 

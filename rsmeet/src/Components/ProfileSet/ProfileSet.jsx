@@ -1,17 +1,25 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Header from "../Header/Header";
 import { BsArrowRight } from "react-icons/bs";
 import { MdModeEdit } from "react-icons/md";
 import axios from "axios";
 import FormData from "form-data";
+import { getApiData } from "../../apis/api";
 import "./ProfileSet.css";
 
-const ProfileSet = ({ regData, setregData }) => {
+const ProfileSet = ({ regData, setregData,token,setcookies }) => {
   const [err, seterr] = useState({
     errDisplay: "none",
     errMessage: "Size should be less then 500kb",
   });
+
+  const [usernameExist, setusernameExist] = useState({
+    display:"none",
+    message:""
+  });
+
+  let history = useHistory();
 
   const uploadHandler = (event) => {
     if (event.target.files[0].size > 541435) {
@@ -36,53 +44,28 @@ const ProfileSet = ({ regData, setregData }) => {
   };
 
   const callRegistrationApi = () => {
-    //Find a more elegent way to return param and create a file called api
-    //Where you will send data as well as url and everything will be returned
+    
 
     const formData = new FormData();
     formData.append("username", regData.username);
-    formData.append("name", regData.name);
-    formData.append("email", regData.email);
-    formData.append("password", regData.password);
-    formData.append("phone", regData.phone);
+    
+    formData.append('token',token);
     formData.append("image", regData.image[0], regData.image[0].name);
-
-    axios
-      .post("http://localhost:9000/login/r", formData, {
-        headers: {
-          accept: "application/json",
-          "Content-Type": "multipart/form-data",
-        },
-      })
+    let url = 'http://localhost:9000/login/ProfileSet';
+    getApiData(formData,url)
       .then((res) => {
-        const { data } = res;
-        console.log({ data });
+        if(res.token){
+          setcookies("authToken", res.token, { path: "/" });
+          history.push('/dashboard');
+        }else if(!res.updated){
+          alert(res.message);
+        }
       })
       .catch((err) => {
-        console.log(err);
+       alert('something went wrong');
       });
 
-    // axios.post('http://localhost:9000/login/r',{
-
-    // params:{
-    //     name:regData.name,
-    //     email:regData.email,
-    //     password:regData.password,
-    //     username:regData.username,
-    //     phone:regData.phone,
-    //     image:regData.image
-
-    // },
-    // headers:{
-    //     "Content-Type": "multipart/form-data"
-    // }
-    // }).then((output)=>{
-    //     const {data} = output;
-    //     console.log(data);
-
-    // }).catch((error)=>{
-    //     console.log(error);
-    // })
+   
   };
 
   const checkData = (e) => {
@@ -93,16 +76,31 @@ const ProfileSet = ({ regData, setregData }) => {
 
   const ProfileUploader = useRef(null);
 
+
+  const CheckUsername = () => {
+    let formData = new FormData();
+    formData.append('username',regData.username);
+    let url = 'http://localhost:9000/login/checkUsername';
+    getApiData(formData,url).then((output)=>{
+      console.log(output);
+        if(output.exist){
+          setusernameExist({display:"inline-block",message:"username is already taken"})
+        }else{
+          setusernameExist({display:"none",message:"username is already taken"});
+        }
+    }).catch((error)=>{
+      setusernameExist({display:"inline-block",message:"Something went wrong"});
+    })
+  }
+
   useEffect(() => {
-    // effect
-    // return () => {
-    //     cleanup
-    // }
-    //Everytime reg data changes , specially user name will change, this effect will be called to backend to check whether username is alrady taken or not
-  }, []);
+    
+    CheckUsername();
+    
+  }, [regData.username]);
 
   return (
-    <>
+    <div className="p-4">
       <Header haderTitle="Set Profile" height="100px" width="100px" />
 
       <form
@@ -179,6 +177,10 @@ const ProfileSet = ({ regData, setregData }) => {
           </div>
         </section>
 
+
+        <span style={{ color: "red",display:usernameExist.display}}> {usernameExist.message} </span>
+        
+
         <section className="w-100 " style={{ textAlign: "right" }}>
           <button className="py-2 px-3 signInButton mt-3" type="submit">
             {" "}
@@ -189,7 +191,7 @@ const ProfileSet = ({ regData, setregData }) => {
           </button>
         </section>
       </form>
-    </>
+    </div>
   );
 };
 

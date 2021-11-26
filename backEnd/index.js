@@ -3,12 +3,12 @@ const process = require('process')
 const app = require('express');
 const cookieParser = require('cookie-parser');
 const express = app();
-//const bodyParser = require('body-parser');
 var cors = require('cors');
 const login = require('./src/indexLogin');
+const server = require('http').createServer(express);
+const io = require('socket.io')(server);
 
-//const { json, urlencoded } = require('body-parser');
-// const multer = require('multer');
+
 
 
 
@@ -20,16 +20,13 @@ express.use(cors({credentials: true, origin: true}));
 express.use(cookieParser());
 
 
-// express.use(bodyParser.urlencoded({extended:true}));
-// express.use(bodyParser.json());
-//   express.use(upload.array());
+
 
 express.use(app.json());
 express.use(app.urlencoded({extended:false}));
 
 
 
-//This line is very very important 
 
 
 
@@ -39,4 +36,7 @@ express.use('/login',login);
 express.use('/login/r',login);
 
 
-express.listen(port);
+//express.listen(port);
+server.listen(port,()=>{
+    console.log(`Server is running at port ${port}...`);
+});

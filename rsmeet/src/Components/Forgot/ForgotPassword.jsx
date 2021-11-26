@@ -8,6 +8,13 @@ const ForgotPassword = ({getApiData}) => {
     mail: "",
   });
 
+  const [fpMessage, setfpMessage] = useState({
+    message : '',
+    display:"none",
+    loginDisplay:"none"
+  })
+
+
   const sendMail = (e) => {
     e.preventDefault();
 
@@ -18,15 +25,15 @@ const ForgotPassword = ({getApiData}) => {
 
     
      getApiData(formData,url).then((res) => {
-        console.log(res);
+      setfpMessage({message:'Mail will be sent if this mail id exist on our system',display:'block',loginDisplay:"none"});
       })
       .catch((error) => {
-        console.log(error);
+        setfpMessage({message:"something went wrong",display:'block',loginDisplay:"inline-block"});
       });
   };
 
   return (
-    <>
+    <div className="p-4">
       <Header haderTitle="Forgot Password" height="100px" width="100px" />
 
       <form
@@ -69,12 +76,26 @@ const ForgotPassword = ({getApiData}) => {
             <span style={{ color: "white" }}> send </span>{" "}
           </button>
         </section>
+
+        
+        <p className="mt-3" style={{display:fpMessage.display}}>
+        {fpMessage.message}
+        <span style={{display:fpMessage.loginDisplay}} >
+            <Link to='/Sign-Up' style={{color:"rgb(62, 236, 90)"}} >. Sign Up </Link>
+        </span>
+        </p>
+        
+
       </form>
 
       <Link className="mt-3" to="/Login" style={{ color: "#3EEC5A" }}>
         Back to Login
       </Link>
-    </>
+
+
+
+
+    </div>
   );
 };
 

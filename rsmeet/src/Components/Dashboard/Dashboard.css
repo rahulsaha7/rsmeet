@@ -1,0 +1,42 @@
+.Dashboard-header {
+  min-height: 140px;
+}
+.listDivs {
+  /* min-height: calc(100vh - 120px); */
+  background: linear-gradient(
+    265.4deg,
+    rgba(0, 31, 70, 0.07) 0%,
+    rgba(10, 42, 82, 0.166781) 18.92%,
+    rgba(23, 56, 98, 0.29004) 44.65%,
+    rgba(43, 78, 121, 0.475491) 85.52%,
+    rgba(67, 104, 149, 0.7) 100%
+  );
+  box-shadow: 0px 4px 40px 8px rgba(20, 0, 255, 0.27);
+  width: 100%;
+}
+
+.chatListContainer {
+  height: 100vh;
+  background: linear-gradient(
+    265.4deg,
+    rgba(0, 31, 70, 0.07) 0%,
+    rgba(10, 42, 82, 0.166781) 18.92%,
+    rgba(23, 56, 98, 0.29004) 44.65%,
+    rgba(43, 78, 121, 0.475491) 85.52%,
+    rgba(67, 104, 149, 0.7) 100%
+  );
+}
+
+.userName-container {
+  box-shadow: 1px 1px rgba(20, 0, 255, 0.27);
+}
+
+.onlineStatus {
+  width: 12px;
+  height: 12px;
+  right: 9px;
+
+  background: #00f418;
+  border-radius: 50%;
+  top: 15px;
+}

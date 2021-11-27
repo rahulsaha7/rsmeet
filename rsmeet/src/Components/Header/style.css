@@ -48,3 +48,35 @@
   background: #00f418;
   border-radius: 50%;
 }
+
+.sendMessage {
+  background: linear-gradient(
+    267.47deg,
+    rgba(15, 53, 94, 0.5) 0%,
+    rgba(41, 83, 127, 0.1) 100%
+  );
+  box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.25);
+  border-radius: 17px;
+}
+
+.Message-input::placeholder {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.1 rem;
+  line-height: 21px;
+  color: #000000;
+}
+.submitButton,
+.option-button {
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.options-div:hover{
+  border: 1px solid blue;
+  padding: 5px;
+  border-radius: 5px;
+}
+

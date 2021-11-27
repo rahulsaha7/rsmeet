@@ -10,7 +10,7 @@ import './getStarted.css';
 const GetStarted = () => {
    
     return (
-        <>
+        <div className="p-4" >
             <figure className="logoHolder">
                 <img src={logo} alt="LOGO" />
             </figure>
@@ -30,7 +30,7 @@ const GetStarted = () => {
             </section>
 
                 <p className="text-break mt-3">Already have an account? <Link to="/Login" style={{color:"#3EEC5A"}}>Sign In</Link></p>
-        </>
+        </div>
             
     )
 }

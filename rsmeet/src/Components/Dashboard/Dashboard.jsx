@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 import BlankDp from "../../Assets/image/blankDp.png";
 import MobileView from "./MobileView";
 import DesktopView from "./DesktopView";
+import Users from "../users/Users";
+import UserInfo from "../users/UserInfo";
+import ProfileInfo from "../users/ProfileInfo";
 
 import "./Dashboard.css";
 
@@ -53,7 +56,7 @@ const Dashboard = () => {
     };
   });
 
-  return Width < 576 ? <MobileView Chatlist={Chatlist} /> : <DesktopView />;
+  return Width < 576 ? <ProfileInfo /> : <DesktopView />;
 };
 
 export default Dashboard;

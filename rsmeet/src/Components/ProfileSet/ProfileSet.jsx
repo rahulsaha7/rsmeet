@@ -50,13 +50,18 @@ const ProfileSet = ({ regData, setregData,token,setcookies }) => {
     formData.append("username", regData.username);
     
     formData.append('token',token);
-    formData.append("image", regData.image[0], regData.image[0].name);
+    if(regData.image===null){
+      formData.append("image","");
+    }else{
+      formData.append("image", regData.image[0], regData.image[0].name);
+    }
+    
     let url = 'http://localhost:9000/login/ProfileSet';
     getApiData(formData,url)
       .then((res) => {
         if(res.token){
           setcookies("authToken", res.token, { path: "/" });
-          history.push('/dashboard');
+          history.push(`/dashboard/home/${regData.username}`);
         }else if(!res.updated){
           alert(res.message);
         }
@@ -128,6 +133,10 @@ const ProfileSet = ({ regData, setregData,token,setcookies }) => {
               ref={ProfileUploader}
               onChange={(event) => {
                 uploadHandler(event);
+              }}
+              required
+              onInvalid = {(e)=>{
+                e.target.setCustomValidity(alert('hey upload image'))
               }}
             />
           </figure>

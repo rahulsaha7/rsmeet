@@ -1,18 +1,21 @@
 import React from "react";
-
+import { useHistory,useRouteMatch } from "react-router-dom";
 import BlankDp from "../../Assets/image/blankDp.png";
-import {AiOutlineMore} from 'react-icons/ai';
+import { AiOutlineMore } from "react-icons/ai";
 
+const DashHeader = ({ id }) => {
+  let history = useHistory();
+  let { path, url } = useRouteMatch();
+  const openProfileInfo = () =>{
+    history.push(`/dashboard/home/profileinfo/${id}`);
+  }
 
-const DashHeader = () => {
-
-   
   return (
     <>
       <header className="headerContainer position-relative ">
-        <div className="d-flex justify-content-between align-content-center position-absolute bottom-0 py-2 px-2 w-100" >
+        <div className="d-flex justify-content-between align-content-center position-absolute bottom-0 py-2 px-2 w-100">
           <section className="profileImage py-2">
-            <figure style={{height:"50px", width:"50px"}} >
+            <figure style={{ height: "50px", width: "50px" }}>
               <img
                 src={BlankDp}
                 alt="BlankDp to visualize user for chooseing Profile Picture"
@@ -20,16 +23,24 @@ const DashHeader = () => {
             </figure>
 
             <span className="position-absolute onlineStatusShow"></span>
+          </section>
+          <section className="d-flex align-items-center mt-3">
+            <h6 style={{ color: "white" }}>1 new message</h6>
+          </section>
 
+          <section
+            className="mt-4 d-flex justify-content-center align-items-center"
+            style={{
+              height: "30px",
+              width: "30px",
+              borderRadius: "50%",
+              background:
+                " linear-gradient(180deg, #676882 0%, rgba(8, 9, 46, 0) 100%)",
+            }}
+            onClick = {()=>{openProfileInfo()}}
+          >
+            <AiOutlineMore />
           </section>
-          <section  className="d-flex align-items-center mt-3" >
-              <h6 style={{color:"white"}} >1 new message</h6>
-          </section>
-
-          <section className="mt-4 d-flex justify-content-center align-items-center" style={{height:"30px",width:"30px",borderRadius:"50%",background:" linear-gradient(180deg, #676882 0%, rgba(8, 9, 46, 0) 100%)"}} >
-                <AiOutlineMore />
-          </section>
-        
         </div>
       </header>
     </>

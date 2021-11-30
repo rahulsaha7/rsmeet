@@ -1,32 +1,29 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const fs = require('fs');
+const fs = require("fs");
 const Router = express.Router();
 const reg = require("./public/components/Reg");
 const login = require("./public/components/login");
 const EmailCheck = require("./public/components/emailCheck");
+const userlist = require("./public/components/ReturnUserList");
 const updatePass = require("./public/components/updatePass");
 const checkuser = require("./public/components/checkUsername");
-const upuser = require('./public/components/updateUsername');
+const upuser = require("./public/components/updateUsername");
 const multer = require("multer");
 const jwt = require("jsonwebtoken");
 const mailSend = require("./public/components/sendMail");
 
 const verifyotp = require("./public/components/verifyOtp");
 
-
-
-
 const imageStorage = multer.diskStorage({
   // Destination to store image
   destination: "./src/public/temp",
   filename: (req, file, cb) => {
-  let   ProfileImage = file.fieldname + "_" + Date.now() + file.originalname;
+    let ProfileImage = file.fieldname + "_" + Date.now() + file.originalname;
 
-    cb(null,ProfileImage);
+    cb(null, ProfileImage);
     // file.fieldname is name of the field (image)
-
   },
 });
 
@@ -54,7 +51,6 @@ Router.post("/", imageUpload.none(), (req, res) => {
   login
     .loginFunc(email, password)
     .then((output) => {
-     
       res.json(output);
     })
     .catch((error) => {
@@ -71,22 +67,11 @@ Router.post("/r", imageUpload.none(), (req, res) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Access-Control-Allow-Credentials", true);
 
-  //imageUpload.single('image')
-
-  //this will give me a proper data
-
   let data = JSON.parse(JSON.stringify(req.body));
-
-  //now question arrises that whether should I add all at once or
-
-  //
-
 
   reg
     .regis(data.name, data.email, data.phone, data.password)
     .then((output) => {
-      //Before sending output I have to create a user folder with username
-      //And make sure that user name is unique
       res.json(output);
     })
     .catch((error) => {
@@ -136,8 +121,6 @@ Router.post("/sendMail", imageUpload.none(), (req, res) => {
   let error = false;
   let message = "mail will be sent if mail id exist";
 
-  //But before intializing this, lets check whether mail exist or not
-
   EmailCheck.Echeck(email)
     .then((output) => {
       if (output.exist) {
@@ -163,8 +146,6 @@ Router.post("/sendMail", imageUpload.none(), (req, res) => {
 
         let text = "Alternative text will be here";
 
-       
-
         mailSend.sendMailFunc(
           email,
           subject,
@@ -181,8 +162,6 @@ Router.post("/sendMail", imageUpload.none(), (req, res) => {
       error = true;
       message = error.message;
     });
-
-
 
   res.json({
     status: status,
@@ -221,7 +200,6 @@ Router.post("/updatePassword", imageUpload.none(), (req, res) => {
   let data = JSON.parse(JSON.stringify(req.body));
   let { token, password } = data;
   updatePass.updatePass(token, password).then((output) => {
-   
     res.json(output);
   });
 });
@@ -243,7 +221,7 @@ Router.post("/otpVerify", imageUpload.none(), (req, res) => {
             username: " ",
           },
           "authJWT",
-          { algorithm: "HS256",expiresIn:"1d" }
+          { algorithm: "HS256", expiresIn: "1d" }
         );
         res.json({
           token: token,
@@ -262,82 +240,116 @@ Router.post("/otpVerify", imageUpload.none(), (req, res) => {
 Router.post("/checkUsername", imageUpload.none(), (req, res) => {
   let data = JSON.parse(JSON.stringify(req.body));
   let { username } = data;
-  checkuser.checkU(username).then((output)=>{
+  checkuser
+    .checkU(username)
+    .then((output) => {
       res.json(output);
-  }).catch((error)=>{
-    res.json({
-      'error':true
     })
-  })
+    .catch((error) => {
+      res.json({
+        error: true,
+      });
+    });
 });
 
-Router.post('/ProfileSet',imageUpload.single('image'),(req,res)=>{
-  
-   let data = JSON.parse(JSON.stringify(req.body));
-  
+Router.post("/ProfileSet", imageUpload.single("image"), (req, res) => {
+  let data = JSON.parse(JSON.stringify(req.body));
+
   let tokenR = data.token;
   let decode = jwt.decode(tokenR);
 
   //copy dp from image temp to dynamic folder
- 
- 
 
-  fs.copyFile(`${req.file.path}`,`./src/public/${decode.userID}/images/${req.file.filename}`,(err)=>{
-    if(err){
-       
-    }else{
+  fs.copyFile(
+    `${req.file.path}`,
+    `./src/public/${decode.userID}/images/${req.file.filename}`,
+    (err) => {
+      if (err) {
+      } else {
+        //then remove the old file
+        fs.unlinkSync(`./${req.file.path}`);
+        //Then add username to database and update new jwt
 
-       //then remove the old file
-       fs.unlinkSync(`./${req.file.path}`);
-       //Then add username to database and update new jwt
-      
-        upuser.updateU(data.username,decode.userID,`./src/public/${decode.userID}/images/${req.file.filename}`).then((output)=>{
-          
-          if(output.updated){
+        upuser
+          .updateU(
+            data.username,
+            decode.userID,
+            `D:/Pu_Chat_App/Code/backEnd/src/public/${decode.userID}/images/${req.file.filename}`
+          )
+          .then((output) => {
+            if (output.updated) {
               //Create a token and return it with a message
-           
-            let  token = jwt.sign(
+
+              let token = jwt.sign(
                 {
                   sub: "Auth JWT",
                   auth: true,
                   userID: decode.userID,
                   verified: true,
                   username: data.username,
-                  image:`./src/public/${decode.userID}/images/${req.file.filename}`,
+                  image: `./src/public/${decode.userID}/images/${req.file.filename}`,
                 },
                 "authJWT",
-                { algorithm: "HS256",expiresIn:"1d" }
+                { algorithm: "HS256", expiresIn: "1d" }
               );
 
-             
               res.json({
-                'token' : token,
-                'updated':output.updated
-              })
-              
-
-          }else{
-            //return error with a message 
-            res.json({
-              'updated':false,
-              "message":"Couldn't find the username"
-            })
-          }
-        }).catch((err)=>{
+                token: token,
+                updated: output.updated,
+              });
+            } else {
+              //return error with a message
+              res.json({
+                updated: false,
+                message: "Couldn't find the username",
+              });
+            }
+          })
+          .catch((err) => {
             //return error with something went wrong while updating the username
             res.json({
-              'error':true,
-              'message':err.message
-            })
-        });
-
-
-
+              error: true,
+              message: err.message,
+            });
+          });
+      }
     }
-  });
-
+  );
 });
- 
-  //then call a file that will upload username to db and update new token
+
+Router.post("/chatlist", imageUpload.none(), (req, res) => {
+  let data = JSON.parse(JSON.stringify(req.body));
+  let { id } = data;
+  console.log(id);
+   userlist.listU.list(id).then((output)=>{
+     console.log(id);
+    res.json(output);
+
+  }).catch((eror)=>{
+    res.json({
+      'error':true,
+      'data':false
+    })
+  })
+});
+
+Router.post("/msglist", imageUpload.none(), (req, res) => {
+  let data = JSON.parse(JSON.stringify(req.body));
+  let { id } = data;
+  let {aid} = data;
+  let {type} = data;
+  console.log(aid);
+  
+  userlist.listU.msglist(id,aid,type).then((output)=>{
+    res.json(output);
+  }).catch((eror)=>{
+    res.json({
+      'error':true,
+      'data':false
+    })
+  })
+});
+
+//then call a file that will upload username to db and update new token
 
 module.exports = Router;

@@ -3,7 +3,7 @@ import React from "react";
 import BlankDp from "../../Assets/image/blankDp.png";
 import { AiOutlineMore } from "react-icons/ai";
 
-const UserHeader = ({ modalDisplay,setmodalDisplay }) => {
+const UserHeader = ({ modalDisplay,setmodalDisplay,name,dp }) => {
   return (
     <>
       <header className="headerContainer position-relative ">
@@ -11,15 +11,15 @@ const UserHeader = ({ modalDisplay,setmodalDisplay }) => {
           <section className="profileImage py-2">
             <figure style={{ height: "50px", width: "50px" }}>
               <img
-                src={BlankDp}
-                alt="BlankDp to visualize user for chooseing Profile Picture"
+                src={dp}
+                alt="dp"
               />
             </figure>
 
             <span className="position-absolute onlineStatusShow"></span>
           </section>
           <section className="d-flex flex-column align-items-center mt-3">
-            <h6 style={{ color: "white" }}>Jhon Doe</h6>
+            <h6 style={{ color: "white" }}>{name}</h6>
             {/* It will show wither online or last active */}
             <span className="" style={{ color: "white" }}>
               online

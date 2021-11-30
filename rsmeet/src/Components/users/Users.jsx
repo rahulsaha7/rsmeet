@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-
+import { Link, useParams } from "react-router-dom";
 import MessageList from "./MessageList";
 import UserHeader from "../Header/UserHeader";
 import { BsEmojiLaughing } from "react-icons/bs";
@@ -8,85 +8,91 @@ import { AiOutlineClear } from "react-icons/ai";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { BiBlock } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
+import { getApiData } from "../../apis/api";
+import io from "socket.io-client";
+import { nanoid } from "nanoid";
 
 // emoji picker
 
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 
+const socket = io("http://localhost:9000");
+
 const Users = () => {
+  const { username, id, aId, type } = useParams();
   const [modal, setmodal] = React.useState("none");
   const [userMsg, setuserMsg] = useState({
     message: "",
   });
+  const [userDetails, setuserDetails] = useState([]);
   const titleRef = useRef(null);
   const [emoji, setemoji] = useState("none");
   const [height, setheight] = useState("");
-  const [msglist, setmsglist] = useState([
-    {
-      body: "hey",
-      time: "7:30",
-      author: "user",
-      msgId: "1",
-    },
-    {
-      body: "hello",
-      time: "8:30",
-      author: "you",
-      msgId: "2",
-    },
-    {
-      body: "how are you? ",
-      time: "9:30",
-      author: "user",
-      msgId: "3",
-    },
-    {
-      body: "whre are you from",
-      time: "10:30",
-      author: "user",
-      msgId: "4",
-    },
-    {
-      body: "I am fron west bengal",
-      time: "11:30",
-      author: "you",
-      msgId: "5",
-    },
-    {
-      body: "ohh, I am from delhi",
-      time: "12:30",
-      author: "user",
-      msgId: "6",
-    },
-    {
-      body: "how you are doing? ",
-      time: "1:30",
-      author: "user",
-      msgId: "7",
-    },
-  ]);
+  const [msglist, setmsglist] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let key = Date.now();
     let h = new Date().getHours();
     let m = new Date().getMinutes();
-    let time = h + " " + m;
-    msglist.push({
+    let time = h + ":" + m;
+    let value = {
       body: userMsg.message,
       time: time,
-      author: "you",
+      author: aId,
+      reciever: id,
+      type: type,
       msgId: key,
-    });
+    };
+
+    socket.emit("rsmeet", value);
+
+    // socket.on("newMsg", (payload) => {
+    //   console.log(payload);
+    // });
+    // msglist.push(value);
+
+    // socket.emit('join',value);
+
     setmsglist(msglist);
-    titleRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-      inline: "nearest",
-    });
+
     setuserMsg({ ...userMsg, message: "" });
   };
+
+  socket.on("invite", (payload) => {
+    if (payload.reciever === id) {
+      socket.emit("joinRoom", payload);
+    }
+  });
+
+  socket.on("new_msg", (payload) => {
+    console.log(payload);
+  });
+
+  socket.on("newMsg", (payload) => {
+    let url = "http://localhost:9000/login/msglist";
+    let formData = new FormData();
+    formData.append("id", id);
+    formData.append("aid", aId);
+    formData.append("type", type);
+    getApiData(formData, url).then((output) => {
+      // console.log(output.data);
+      let check = output.data;
+      check.sort((a, b) => {
+        return a.msgId - b.msgId;
+      });
+      setmsglist(check);
+    });
+  });
+
+  // socket.on("chat",(payload)=>{
+  //   socket.emit('message',payload)
+  // })
+
+  // socket.on("message",(body)=>{
+  //   console.log(body);
+  // })
 
   const addEmoji = (e) => {
     let emoji = e.native;
@@ -97,23 +103,43 @@ const Users = () => {
 
   const changeHeight = () => {
     let p = document.querySelector(".emoji-mart").style.height;
-    console.log(p);
     height === "calc(100vh - 60px - 140px)"
       ? setheight("100px")
       : setheight("calc(100vh - 60px - 140px)");
   };
 
-  
+  const getMessage = () => {
+    let url = "http://localhost:9000/login/msglist";
+    let formData = new FormData();
+    formData.append("id", id);
+    formData.append("aid", aId);
+    formData.append("type", type);
+    getApiData(formData, url).then((output) => {
+      let check = output.data;
+      check.sort((a, b) => {
+        return a.msgId - b.msgId;
+      });
+      console.log(check);
+      setmsglist(check);
+      //console.log(output);
+      setuserDetails(output.user);
+    });
+  };
 
   useEffect(() => {
     changeHeight();
   }, [emoji]);
 
-
+  // console.log(msglist);
 
   useEffect(() => {
-    titleRef.current.scrollIntoView({ behavior: 'smooth' });
-  }, );
+    let elm = document.getElementById("chatBottom");
+    elm.scrollIntoView({ behavior: "smooth" });
+  }, [msglist]);
+
+  useEffect(() => {
+    getMessage();
+  }, [id, aId, type]);
 
   return (
     <main
@@ -121,7 +147,12 @@ const Users = () => {
       style={{ width: "100vw", height: "100vh" }}
     >
       <section className="Dashboard-header">
-        <UserHeader modalDisplay={modal} setmodalDisplay={setmodal} />
+        <UserHeader
+          modalDisplay={modal}
+          setmodalDisplay={setmodal}
+          name={userDetails.name}
+          dp={userDetails.image}
+        />
       </section>
 
       <section
@@ -134,18 +165,23 @@ const Users = () => {
             style={{ height: height }}
             ref={titleRef}
           >
-            {msglist?.map((list) => (
-              <MessageList
-                msg={list.body}
-                time={list.time}
-                author={list.author}
-                key={list.msgId}
-              />
-            ))}
+            {msglist.length > 0 ? (
+              msglist?.map((list, index) => (
+                <MessageList
+                  msg={list.body}
+                  time={list.time}
+                  author={list.author}
+                  key={index}
+                  id={id}
+                />
+              ))
+            ) : (
+              <h5>start a new chat</h5>
+            )}
 
             {/* Section for auto scroll to bottom */}
 
-            <section ref={titleRef}></section>
+            <section ref={titleRef} id="chatBottom"></section>
           </div>
 
           <div className="inputContainer position-absolute bottom-0 px-2 mb-3 w-100">
@@ -210,7 +246,9 @@ const Users = () => {
             <AiFillInfoCircle />
           </span>
           <button className="option-button">
-            <span>user info</span>
+            <Link to={`/dashboard/home/userinfo/${username}/${id}/${aId}`}>
+              <span>user info</span>
+            </Link>
           </button>
         </div>
         <div className="d-flex flex-row options-div">

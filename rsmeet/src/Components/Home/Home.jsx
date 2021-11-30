@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Router, Switch, Route, useHistory, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useHistory,
+  Redirect,
+} from "react-router-dom";
 import GetStarted from "../GetStarted/GetStarted";
 import Login from "../Login/Login";
 import ForgotPassword from "../Forgot/ForgotPassword";
@@ -16,6 +22,7 @@ import axios from "axios";
 import "./Home.css";
 import { getApiData } from "../../apis/api.js";
 import { BsChevronDoubleLeft } from "react-icons/bs";
+import DashRouting from "../Dashboard/DashRouting";
 
 const Home = ({ backImage }) => {
   const [regData, setregData] = useState({
@@ -52,7 +59,6 @@ const Home = ({ backImage }) => {
     digit6: "",
   });
 
-  const [urlChanged, seturlChanged] = useState(false);
   const [authTokenValues, setauthTokenValues] = useState({
     auth: false,
     username: "",
@@ -64,7 +70,7 @@ const Home = ({ backImage }) => {
     password: "",
   });
 
-  const [cookies, setcookies] = useCookies(["authToken"]);
+  const [cookies, setcookies, removeCookies] = useCookies(["authToken"]);
 
   const history = useHistory();
   let historyChanged = false;
@@ -83,7 +89,7 @@ const Home = ({ backImage }) => {
       if (output.token) {
         setcookies("authToken", output.token, { path: "/" });
         setverifyEmailData({ ...verifyEmailData, email: LoginData.username });
-        history.push("/dashboard");
+        history.push(`/dashboard/home/${authTokenValues.username}`);
       } else {
         alert(output.Message);
       }
@@ -93,8 +99,7 @@ const Home = ({ backImage }) => {
   };
 
   const isRegDetails = () => {
-    if (authTokenValues.verified && authTokenValues.username !== " ")
-      return true;
+    if (authTokenValues.username !== " ") return true;
     return false;
   };
 
@@ -125,7 +130,7 @@ const Home = ({ backImage }) => {
         });
         setverifyEmailData({ ...verifyEmailData, email: regData.email });
 
-        history.push("/dashboard");
+        history.push(`/dashboard/home/${authTokenValues.username}`);
       } else {
         alert(data.Message);
       }
@@ -188,7 +193,7 @@ const Home = ({ backImage }) => {
         console.log(output);
         if (output.token) {
           setcookies("authToken", output.token, { path: "/" });
-          history.push("/dashboard");
+          history.push(`/dashboard/home/${authTokenValues.username}`);
         } else if (output.expired) {
           setverifyEmailData({
             display: "inline-block",
@@ -242,7 +247,7 @@ const Home = ({ backImage }) => {
   }, [historyChanged, cookies.authToken]);
 
   return (
-    <Router history={history}>
+    <>
       <Switch>
         <div
           className="home-container  background d-flex justify-content-center align-items-center overflow-auto"
@@ -252,135 +257,99 @@ const Home = ({ backImage }) => {
             className="home-view d-flex flex-column justify-content-center align-items-center"
             style={{}}
           >
-            
+            <Route exact path="/" component={GetStarted} />
 
-            
-            <Route exact path="/" component={GetStarted}></Route>
+            <Route exact path="/Login">
+              {authTokenValues.auth ? (
+                <Redirect to={`/dashboard/home/${authTokenValues.username}`} />
+              ) : (
+                <Login
+                  LoginData={LoginData}
+                  setLoginData={setLoginData}
+                  LoginForm={LoginForm}
+                />
+              )}
+            </Route>
 
-            <Route
-              exact
-              path="/Login"
-              render={(props) =>
-                authTokenValues.auth ? (
-                  <Redirect to="/dashboard" />
-                ) : (
-                  <Login
-                    LoginData={LoginData}
-                    setLoginData={setLoginData}
-                    LoginForm={LoginForm}
-                  />
-                )
-              }
-            />
-            <Route
-              exact
-              path="/Sign-up"
-              render={(props) =>
-                authTokenValues.auth ? (
-                  <Redirect to="/dashboard" />
-                ) : (
-                  <Signup
-                    regData={regData}
-                    setregData={setregData}
-                    handleRegSubmit={HandleRegSubmit}
-                    getApiData={getApiData}
-                  />
-                )
-              }
-            />
-            <Route
-              exact
-              path="/Forgot-Password"
-              render={(props) => <ForgotPassword getApiData={getApiData} />}
-            ></Route>
+            <Route exact path="/Sign-up">
+              {authTokenValues.auth ? (
+                <Redirect to={`/dashboard/home/${authTokenValues.username}`} />
+              ) : (
+                <Signup
+                  regData={regData}
+                  setregData={setregData}
+                  handleRegSubmit={HandleRegSubmit}
+                  getApiData={getApiData}
+                />
+              )}
+            </Route>
 
-            <Route
-              exact
-              path="/verify-mail"
-              render={(props) =>
-                authTokenValues.verified ? (
-                  <Redirect to="/Profile-Set" />
-                ) : (
-                  <MailVerify
-                    handleVerifyEmail={handleVerifyEmail}
-                    verifyEmailData={verifyEmailData}
-                    setverifyEmailData={setverifyEmailData}
-                  />
-                )
-              }
-            />
+            <Route exact path="/Forgot-Password">
+              <ForgotPassword getApiData={getApiData} />
+            </Route>
 
-            <Route
-              exact
-              path="/reset-password/:key"
-              render={(props) => (
+            <Route exact path="/verify-mail">
+              {authTokenValues.verified ? (
+                <Redirect to="/Profile-Set" />
+              ) : (
+                <MailVerify
+                  handleVerifyEmail={handleVerifyEmail}
+                  verifyEmailData={verifyEmailData}
+                  setverifyEmailData={setverifyEmailData}
+                />
+              )}
+            </Route>
+
+            <Route exact path="/reset-password/:key">
+              {
                 <ResetPass
                   rpdata={rpdata}
                   setrpdata={setrpdata}
                   handleResetPasswordForm={handleResetPasswordForm}
                   rpMessage={rpMessage}
                 />
+              }
+            </Route>
+
+            <Route exact path="/Profile-Set">
+              {authTokenValues.username === " " ? (
+                <ProfileSet
+                  regData={regData}
+                  setregData={setregData}
+                  token={cookies.authToken}
+                  setcookies={setcookies}
+                />
+              ) : (
+                <Redirect to={`/dashboard/home/${authTokenValues.username}`} />
               )}
-            />
+            </Route>
 
-            <Route
-              exact
-              path="/Profile-Set"
-              render={(props) =>
-                authTokenValues.username === " " ? (
-                  <ProfileSet
-                    regData={regData}
-                    setregData={setregData}
-                    token={cookies.authToken}
-                    setcookies={setcookies}
-                  />
-                ) : (
-                  <Redirect to="/dashboard" />
-                )
-              }
-            />
+            <Route path={`/dashboard/home/:username`}>
+              {isRegDetails() ? (
+                <DashRouting removecookies={removeCookies} />
+              ) : (
+                <Redirect to="/Profile-set" />
+              )}
+            </Route>
 
-           
+            {/* <Route path="/dashboard/home">
+              <DashRouting
+               
+                removecookies={removeCookies}
+              />
+            </Route> */}
 
-            <Route
-              exact
-              path="/dashboard"
-              render={(props) =>
-                isRegDetails() ? (
-                  <Dashboard />
-                ) : authTokenValues.verified ? (
-                  <Redirect to="/Profile-set" />
-                ) : (
-                  <Redirect to="/verify-mail" />
-                )
-              }
-            />
+            <Route exact path="/dashboard/home">
+              <Redirect to={`/dashboard/home/${authTokenValues.username}`} />
+            </Route>
 
-            {/* <Route path="*" component={ErrorPage} /> */}
+            <Route exact path="/dashboard/">
+              <Redirect to={`/dashboard/home/${authTokenValues.username}`} />
+            </Route>
           </section>
         </div>
-
-        <Route
-          exact
-          path="/dashboard"
-          render={(props) =>
-            isRegDetails() ? (
-              <Dashboard />
-            ) : authTokenValues.verified ? (
-              <Redirect to="/Profile-set" />
-            ) : (
-              <Redirect to="/verify-mail" />
-            )
-          }
-        />
-
-        {/* <Route path="*" component={ErrorPage} /> */}
-
-        {/* If user is logged in that means jwt will created then redirect to dashboard else get started */}
       </Switch>
-
-      {/* Here dashboard page will be here */}
-    </Router>
+    </>
   );
 };
 

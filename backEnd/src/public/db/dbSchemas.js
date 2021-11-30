@@ -41,62 +41,10 @@ const regSchema = new mongoose.Schema(
 const conSchema = new mongoose.Schema(
   {
     userID: { type: String, required: true },
-    message: [
-      {
-        userID: {
-          msg: {
-            type: String,
-          },
-          time: {
-            type: String,
-          },
-          date: {
-            type: String,
-          },
-          auther:{
-            type:String,
-          }
-        },
-      },
-    ],
-
-    pMessage: [
-      {
-        userID: {
-          msg: {
-            type: String,
-          },
-          time: {
-            type: String,
-          },
-          date: {
-            type: String,
-          },
-        },
-      },
-    ],
-    blockList: [
-      {
-        userID: {
-          type: String,
-        },
-      },
-    ],
-    deleteList: [
-      {
-        userID: {
-          msg: {
-            type: String,
-          },
-          time: {
-            type: String,
-          },
-          date: {
-            type: String,
-          },
-        },
-      },
-    ],
+    message: {type: Array,required  :true},
+  pMessage: {type:Array,required:true},
+    blockList: {type:Array,required:true},
+    deleteList: {type:Array,required:true},
   },
   { collection: "Conversation" }
 );

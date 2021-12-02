@@ -3,7 +3,7 @@ import { useHistory,useRouteMatch } from "react-router-dom";
 import BlankDp from "../../Assets/image/blankDp.png";
 import { AiOutlineMore } from "react-icons/ai";
 
-const DashHeader = ({ id }) => {
+const DashHeader = ({ id,count }) => {
   let history = useHistory();
   let { path, url } = useRouteMatch();
   const openProfileInfo = () =>{
@@ -12,7 +12,7 @@ const DashHeader = ({ id }) => {
 
   return (
     <>
-      <header className="headerContainer position-relative ">
+      <header className="headerContainer position-relative " style={{WebkitBackdropFilter:"blur(40px)"}} >
         <div className="d-flex justify-content-between align-content-center position-absolute bottom-0 py-2 px-2 w-100">
           <section className="profileImage py-2">
             <figure style={{ height: "50px", width: "50px" }}>
@@ -25,7 +25,7 @@ const DashHeader = ({ id }) => {
             <span className="position-absolute onlineStatusShow"></span>
           </section>
           <section className="d-flex align-items-center mt-3">
-            <h6 style={{ color: "white" }}>1 new message</h6>
+            <h6 style={{ color: "white" }}>{count > 0  ? `${count} new message` : `no new message` }</h6>
           </section>
 
           <section

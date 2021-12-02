@@ -4,9 +4,11 @@ import { FaUserAlt } from "react-icons/fa";
 import { ImBlocked } from "react-icons/im";
 import { BiLogOut } from "react-icons/bi";
 import { useHistory } from "react-router-dom";
+import useOnlineStatus from '@rehooks/online-status';
 
 const ProfileInfo = ({ removecookies }) => {
   let history = useHistory();
+  const onlineStatus = useOnlineStatus();
 
   const LogOut = () => {
     //alert("hello");
@@ -35,7 +37,7 @@ const ProfileInfo = ({ removecookies }) => {
               <span>Rahul7</span>
             </button>
           </div>
-          <div className="d-flex flex-row options-div justify-content-center">
+          {/* <div className="d-flex flex-row options-div justify-content-center">
             <button className="option-button ms-4">
               <span>User Since : 18/05/2020</span>
             </button>
@@ -44,10 +46,7 @@ const ProfileInfo = ({ removecookies }) => {
             <span>
               <ImBlocked />
             </span>
-            <button className="option-button ms-4">
-              <span>block list</span>
-            </button>
-          </div>
+          </div> */}
           <div className="d-flex flex-row options-div justify-content-center">
             <span>
               <BiLogOut />

@@ -55,20 +55,10 @@ const Users = () => {
 
     // socket.emit('join',value);
 
-    setmsglist(msglist);
+    // setmsglist(msglist);
 
     setuserMsg({ ...userMsg, message: "" });
   };
-
-  socket.on("invite", (payload) => {
-    if (payload.reciever === id) {
-      socket.emit("joinRoom", payload);
-    }
-  });
-
-  socket.on("new_msg", (payload) => {
-    console.log(payload);
-  });
 
   socket.on("newMsg", (payload) => {
     let url = "http://localhost:9000/login/msglist";
@@ -82,17 +72,10 @@ const Users = () => {
       check.sort((a, b) => {
         return a.msgId - b.msgId;
       });
+      // console.log(check);
       setmsglist(check);
     });
   });
-
-  // socket.on("chat",(payload)=>{
-  //   socket.emit('message',payload)
-  // })
-
-  // socket.on("message",(body)=>{
-  //   console.log(body);
-  // })
 
   const addEmoji = (e) => {
     let emoji = e.native;
@@ -139,7 +122,11 @@ const Users = () => {
 
   useEffect(() => {
     getMessage();
-  }, [id, aId, type]);
+  }, []);
+
+  // useEffect(() => {
+
+  // }, [ ])
 
   return (
     <main
@@ -173,6 +160,8 @@ const Users = () => {
                   author={list.author}
                   key={index}
                   id={id}
+                  aid={aId}
+                  receiver={list.receiver}
                 />
               ))
             ) : (

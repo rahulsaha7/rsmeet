@@ -1,25 +1,29 @@
-import  { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouteMatch, useHistory } from "react-router-dom";
 import { getApiData } from "../../apis/api";
-const List = ({ dp, name, time, userId,authorId,username }) => {
+import Badge from "./Badge";
+const List = ({ dp, name, time, userId, authorId, username,count,u,uname }) => {
   const history = useHistory();
   const [lastValues, setlastValues] = useState([]);
   let { url } = useRouteMatch();
   const openChats = () => {
-    history.push(`/dashboard/home/${username}/chatlist/nt/${userId}/${authorId}`);
+    history.push(
+      `/dashboard/home/${username}/chatlist/nt/${userId}/${authorId}`
+    );
   };
 
+  // console.log(username);
 
-  const showLastMessage = () =>{
+  const showLastMessage = () => {
     // let url = "http://localhost:9000/login/msglist";
     // let formData = new FormData();
     // formData.append("id", id);
     // getApiData(formData, url)
-  }
+  };
 
   useEffect(() => {
     showLastMessage();
-  }, []);
+  }, [count,u]);
 
   return (
     <section
@@ -29,12 +33,9 @@ const List = ({ dp, name, time, userId,authorId,username }) => {
       <div className="d-flex justify-content-between align-content-center py-2 px-2 w-100">
         <section className="profileImage py-2 d-flex align-items-center">
           <figure style={{ height: "50px", width: "50px" }}>
-            <img
-              src={dp}
-              alt="dp"
-            />
+            <img src={dp} alt="dp" />
           </figure>
-          <span className="position-relative onlinestatus"></span>
+          {/* <span className="position-relative onlinestatus"></span> */}
         </section>
         <section className="d-flex align-items-center mt-3 flex-column ">
           <h6 style={{ color: "white" }}>{name}</h6>
@@ -53,6 +54,10 @@ const List = ({ dp, name, time, userId,authorId,username }) => {
           {time}
         </section>
       </div>
+    {
+      (userId === u  && username === uname) ? <Badge count={count} /> : console.log(userId,u)
+    }
+       {/* <span class="badge"style={{background:"red"}} >{count}</span> */}
     </section>
   );
 };

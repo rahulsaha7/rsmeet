@@ -8,6 +8,7 @@ const messageList = async (payload) =>{
     let userid;
     let encrypter;
     let data;
+    let username="";
     let chats={};
     let {type} = payload;
     let updated;
@@ -44,7 +45,8 @@ const messageList = async (payload) =>{
 
         updated = true;
 
-
+        docs = await Schemas.schemaA.register.find({_id:payload.reciever});
+        username=docs[0].username;
         
         
     }catch(err){
@@ -54,7 +56,10 @@ const messageList = async (payload) =>{
         // let result = {
         //     'payload':data
         // }
-        return updated;
+        return {
+            updated,
+            username
+        };
     }
 }
 

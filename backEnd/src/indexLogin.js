@@ -13,7 +13,7 @@ const upuser = require("./public/components/updateUsername");
 const multer = require("multer");
 const jwt = require("jsonwebtoken");
 const mailSend = require("./public/components/sendMail");
-
+const useri = require('./public/components/UserInfo');
 const verifyotp = require("./public/components/verifyOtp");
 
 const imageStorage = multer.diskStorage({
@@ -128,7 +128,7 @@ Router.post("/sendMail", imageUpload.none(), (req, res) => {
         let port = 465;
         let subject = "Reset password request";
         let user = "rsahagdrive@gmail.com";
-        let password = "shinchan7242";
+        let password = "Shinchan7242";
 
         let token = jwt.sign(
           {
@@ -320,32 +320,48 @@ Router.post("/ProfileSet", imageUpload.single("image"), (req, res) => {
 Router.post("/chatlist", imageUpload.none(), (req, res) => {
   let data = JSON.parse(JSON.stringify(req.body));
   let { id } = data;
-  console.log(id);
-   userlist.listU.list(id).then((output)=>{
-     console.log(id);
-    res.json(output);
 
-  }).catch((eror)=>{
-    res.json({
-      'error':true,
-      'data':false
+  userlist.listU
+    .list(id)
+    .then((output) => {
+      res.json(output);
     })
-  })
+    .catch((eror) => {
+      res.json({
+        error: true,
+        data: false,
+      });
+    });
 });
 
 Router.post("/msglist", imageUpload.none(), (req, res) => {
   let data = JSON.parse(JSON.stringify(req.body));
   let { id } = data;
-  let {aid} = data;
-  let {type} = data;
-  console.log(aid);
-  
-  userlist.listU.msglist(id,aid,type).then((output)=>{
+  let { aid } = data;
+  let { type } = data;
+
+  userlist.listU
+    .msglist(id, aid, type)
+    .then((output) => {
+      res.json(output);
+    })
+    .catch((eror) => {
+      res.json({
+        error: true,
+        data: false,
+      });
+    });
+});
+
+Router.post("/userinfo", imageUpload.none(), (req, res) => {
+  let data = JSON.parse(JSON.stringify(req.body));
+  let { username } = data;
+  useri.userinfo(username).then((output)=>{
     res.json(output);
-  }).catch((eror)=>{
+  }).catch((err)=>{
     res.json({
       'error':true,
-      'data':false
+      'message':err.message
     })
   })
 });

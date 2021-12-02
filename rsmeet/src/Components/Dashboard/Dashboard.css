@@ -82,7 +82,6 @@
   border-radius: 17px 17px 0px 17px;
 }
 
-
 .UserInfoHeader {
   width: 100%;
   height: 140px;
@@ -113,3 +112,9 @@
   background: #00f418;
   border-radius: 50%;
 }
+
+/* .badge {
+  position: relative;
+  bottom: 90 px;
+  left: 90%;
+} */

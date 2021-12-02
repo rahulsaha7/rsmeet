@@ -43,7 +43,6 @@ const msglist = async(id,aid,type) =>{
     let data;
     let user;
     try{
-        console.log(id);
         const docs = await Schemas.schemaA.conve.find({userID:id}); 
         const docs2 = await Schemas.schemaA.register.find({_id:id});
         const docs3 = await Schemas.schemaA.conve.find({userID:aid}); 

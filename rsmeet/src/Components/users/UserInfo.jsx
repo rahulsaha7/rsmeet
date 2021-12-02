@@ -1,18 +1,55 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import UserInfoHeader from "../Header/UserInfoHeader";
 import { BiDownArrow } from "react-icons/bi";
 import { Link, useParams } from "react-router-dom";
 import { FaRegChartBar } from "react-icons/fa";
+import { getApiData } from "../../apis/api";
+
+
 
 const UserInfo = () => {
   const { username,id,aId } = useParams();
+ 
   const [pchat, setpchat] = useState({
     display: "none",
   });
 
+  const [userinfo, setuserinfo] = useState({
+    'name':"",
+    'dp':"",
+    'status':[]
+  })
+
   const [ruser, setruser] = useState({
     display: "none",
   });
+
+
+  
+
+  // useEffect(() => {
+  //     getuserInfo();
+  // }, []);
+
+
+  const getUserInfo = () =>{
+    let url = "http://localhost:9000/login/userinfo";
+    let formData = new FormData();
+    formData.append("username",username);
+    getApiData(formData, url).then((output) => {
+     
+      setuserinfo({name:output.data.name,dp:output.data.dp,status:output.data.status})
+      
+      
+    });
+  }
+
+
+  useEffect(() => {
+      getUserInfo();
+  }, [username])
+
+ 
 
   return (
     <main
@@ -20,7 +57,7 @@ const UserInfo = () => {
       style={{ width: "100vw", height: "100vh" }}
     >
       <section className="Dashboard-header">
-        <UserInfoHeader />
+        <UserInfoHeader name={userinfo.name} status={userinfo.status} dp={userinfo.dp} />
       </section>
       <section className="" style={{ height: "calc(100vh - 140px)" }}>
         <div className="listDivs h-100 pt-5">

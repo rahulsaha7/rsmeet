@@ -49,43 +49,20 @@ io.on("connection",(socket)=>{
         //Upload to daatabase;
        
         msg.message(payload).then((output)=>{
-           
-            io.emit("newMsg",output);
+           // console.log(typeof(payload));
+            
+            io.emit("newMsg",{output,payload});
         })
         
-        //  io.emit("newMsg",data);
         
         
     });
 
 
-    // socket.on("updated",(payload)=>{
-    //     io.emit('CheckMsg',payload);
-    // })
+  
 
 
-
-    // socket.on('join',(payload)=>{
-    //     socket.join(payload.author);
-       
-    // })
-
-
-    socket.on('create', (payload)=> {
-        // socket.join(payload.room);
-        
-        socket.join(payload.receiver);
-        // socket.broadcast.to(payload.withUserId).emit("invite",payload)
-        io.emit('invite',payload);
-    });
-
-    socket.on('joinRoom', (payload) => {
-        
-         socket.join(payload.reciever);
-        // io.to(data.receiver).emit('message',data);
-        
-        io.sockets.in(payload.receiver).emit('new_msg',payload.body);
-    });
+  
 
     
     

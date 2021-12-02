@@ -25,13 +25,18 @@ const Dashboard = ({ authTokenValues }) => {
     };
   });
 
-  return Width < 576 ? (
-    <MobileView
+  // return Width < 576 ? (
+  //   <MobileView
+  //     authTokenValues={authTokenValues}
+  //   />
+  // ) : (
+  //   <DesktopView />
+  // );
+return(
+  <MobileView
       authTokenValues={authTokenValues}
     />
-  ) : (
-    <DesktopView />
-  );
+);
 };
 
 export default Dashboard;

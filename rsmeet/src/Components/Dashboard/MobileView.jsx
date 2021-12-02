@@ -23,11 +23,25 @@ const MobileView = () => {
     id: "",
   });
 
+  const [newMsg, setnewMsg] = useState({
+    count: 0,
+    user: "",
+    uname:"",
+  });
+
   socket.on("newMsg", (payload) => {
     // socket.emit("create", payload);
     // if(payload){
     //   socket.emit('updated',payload);
     // }
+    console.log(payload.output)
+    if(payload.output.updated){
+      let c = newMsg.count;
+      c = c+1;
+      let u = payload.payload.author;
+        setnewMsg({count:c,user:u,uname:payload.output.username})
+     // console.log(u);
+    }
   });
 
   const setAuthToken = () => {
@@ -39,8 +53,7 @@ const MobileView = () => {
       .then((output) => {
         console.log(output);
         if (output.error) {
-          console.log(output);
-          setchatlist(output.data);
+          // setchatlist(output.data);
         } else {
           setchatlist(output.data);
           setauthorId({ ...authorId, id: output.user });
@@ -55,6 +68,9 @@ const MobileView = () => {
     setAuthToken();
   }, [path]);
 
+
+  
+
   return (
     <>
       <Switch>
@@ -64,7 +80,7 @@ const MobileView = () => {
             style={{ width: "100vw", height: "100vh" }}
           >
             <section className="Dashboard-header">
-              <DashHeader id={username} />
+              <DashHeader id={username} count={newMsg.count} />
             </section>
             <section
               className="overflow-auto"
@@ -79,14 +95,15 @@ const MobileView = () => {
                     userId={chats._id}
                     authorId={authorId.id}
                     username={username}
+                    count={newMsg.count}
+                    u = {newMsg.user}
+                    uname={newMsg.uname}
                   />
                 ))}
               </div>
             </section>
           </main>
         </Route>
-
-       
       </Switch>
     </>
   );

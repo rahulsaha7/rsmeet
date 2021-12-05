@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useHistory,
-  Redirect,
-} from "react-router-dom";
+import { Switch, Route, useHistory, Redirect } from "react-router-dom";
 import GetStarted from "../GetStarted/GetStarted";
 import Login from "../Login/Login";
 import ForgotPassword from "../Forgot/ForgotPassword";
@@ -13,15 +7,15 @@ import Signup from "../Signup/Signup";
 import MailVerify from "../Verify/MailVerify";
 import ProfileSet from "../ProfileSet/ProfileSet";
 import ResetPass from "../ResetPassword/ResetPass";
-import ErrorPage from "../Error/ErrorPage";
+
 import BlankDp from "../../Assets/image/blankDp.png";
-import Dashboard from "../Dashboard/Dashboard";
+
 import { useCookies } from "react-cookie";
 import jwt from "jsonwebtoken";
-import axios from "axios";
+
 import "./Home.css";
 import { getApiData } from "../../apis/api.js";
-import { BsChevronDoubleLeft } from "react-icons/bs";
+
 import DashRouting from "../Dashboard/DashRouting";
 
 const Home = ({ backImage }) => {
@@ -214,11 +208,9 @@ const Home = ({ backImage }) => {
   const CheckIfLoggedin = () => {
     if (cookies.authToken) {
       try {
-        console.log(typeof process.env.REACT_APP_JWT_CODE);
         jwt.verify(cookies.authToken, process.env.REACT_APP_JWT_CODE);
 
         let decode = jwt.decode(cookies.authToken);
-        console.log(decode);
         setauthTokenValues({
           auth: decode.auth,
           username: decode.username,
@@ -248,15 +240,15 @@ const Home = ({ backImage }) => {
 
   return (
     <>
-      <Switch>
-        <div
-          className="home-container  background d-flex justify-content-center align-items-center overflow-auto"
-          style={{ backgroundImage: `url(${backImage})` }}
+      <div
+        className="home-container  background d-flex justify-content-center align-items-center overflow-auto"
+        style={{ backgroundImage: `url(${backImage})` }}
+      >
+        <section
+          className="home-view d-flex flex-column justify-content-center align-items-center"
+          style={{}}
         >
-          <section
-            className="home-view d-flex flex-column justify-content-center align-items-center"
-            style={{}}
-          >
+          <Switch>
             <Route exact path="/" component={GetStarted} />
 
             <Route exact path="/Login">
@@ -346,9 +338,9 @@ const Home = ({ backImage }) => {
             <Route exact path="/dashboard/">
               <Redirect to={`/dashboard/home/${authTokenValues.username}`} />
             </Route>
-          </section>
-        </div>
-      </Switch>
+          </Switch>
+        </section>
+      </div>
     </>
   );
 };

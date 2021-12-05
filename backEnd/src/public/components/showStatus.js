@@ -3,36 +3,23 @@ const Schemas = require("../db/dbSchemas");
 
 mongoose.connect("mongodb://localhost/chatApplication");
 
-const userinfo = async (id,username) => {
+const showstatus = async (id) => {
   let error = false;
   let success = false;
   let data;
   try {
-    let docs;
-    if(id){
-       docs = await Schemas.schemaA.register.find({ _id: id });
-    }else if(username){
-       docs = await Schemas.schemaA.register.find({ username: username });
-    }
-    
-    
-
+    let docs = await Schemas.schemaA.register.find({ _id: id });
     if (docs) {
       success = true;
-      data = {
-        name: docs[0].name,
-        status: docs[0].status,
-        dp: docs[0].image,
-        date:docs[0].date,
-      };
+      data = docs[0].status;
     } else {
-      exist = false;
+      success = false;
       error = false;
       data = "";
     }
   } catch (err) {
     error = true;
-    data = "";
+    data = err.message;
   } finally {
     let result = {
       sucess: success,
@@ -43,4 +30,4 @@ const userinfo = async (id,username) => {
   }
 };
 
-module.exports.userinfo = userinfo;
+module.exports.showstatus = showstatus;

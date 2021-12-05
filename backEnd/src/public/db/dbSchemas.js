@@ -18,20 +18,7 @@ const regSchema = new mongoose.Schema(
       default: Date.now(),
     },
     report: { type: Number, required: true, default: 0 },
-    status: [
-      {
-        online: {
-          type: Boolean,
-          required: true,
-          default: false,
-        },
-        activity: {
-          type: Number,
-          required: true,
-          default: Date.now(),
-        },
-      },
-    ],
+    status: { type: Array, required: true, default: [] },
   },
   { collection: "Auth" }
 );
@@ -41,10 +28,10 @@ const regSchema = new mongoose.Schema(
 const conSchema = new mongoose.Schema(
   {
     userID: { type: String, required: true },
-    message: {type: Array,required  :true},
-  pMessage: {type:Array,required:true},
-    blockList: {type:Array,required:true},
-    deleteList: {type:Array,required:true},
+    message: { type: Array, required: true },
+    pMessage: { type: Array, required: true },
+    blockList: { type: Array, required: true },
+    deleteList: { type: Array, required: true },
   },
   { collection: "Conversation" }
 );

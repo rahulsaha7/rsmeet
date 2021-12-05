@@ -1,11 +1,8 @@
 import React from "react";
-import { useParams } from "react-router";
 import BlankDp from "../../Assets/image/blankDp.png";
-import { AiOutlineMore } from "react-icons/ai";
 
 
-const UserInfoHeader = ({ modalDisplay, setmodalDisplay,name,status,dp }) => {
-  const {username} = useParams();
+const UserInfoHeader = ({ name,status,dp }) => {
 
   
 
@@ -16,22 +13,27 @@ const UserInfoHeader = ({ modalDisplay, setmodalDisplay,name,status,dp }) => {
           <section className="profileImage py-2 mb-0">
             <figure style={{ height: "50px", width: "50px" }}>
               <img
-                src={dp}
+                src={BlankDp}
                 alt="dp"
               />
             </figure>
-
-            <span
-              className="position-absolute onlineStatus"
-              style={{ top: "48px !important", left: "11pc !important" }}
-            ></span>
+          {
+            status.length > 0  ? status[0].status ?  <span
+            className="position-relative onlineStatus"
+            style={{ top: "48px !important", left: "11pc !important",background:"green !important" }}
+          ></span> : '' : ""
+          }
+            {/* // <span
+            //   className="position-absolute onlineStatus"
+            //   style={{ top: "48px !important", left: "11pc !important" }}
+            // ></span> */}
           </section>
           <section className="d-flex flex-column align-items-center mt-3">
             <h6 style={{ color: "white" }}>{name}</h6>
             {/* It will show wither online or last active */}
 
             <span className="" style={{ color: "white" }}>
-              {status ? "online" : "offline"}
+            {status.length > 0 ? (status[0].status ? "online" : status[0].last) : "offline"}
             </span>
           </section>
         </div>

@@ -1,4 +1,4 @@
-import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import Users from "../users/Users";
 import Dashboard from "./Dashboard";
@@ -6,7 +6,6 @@ import UserInfo from "../users/UserInfo";
 import ProfileInfo from "../users/ProfileInfo";
 
 const DashRouting = ({ AuthTokenValues, removecookies }) => {
-  let { path, url } = useRouteMatch();
   return (
     <>
       <Switch>

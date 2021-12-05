@@ -13,8 +13,10 @@ const upuser = require("./public/components/updateUsername");
 const multer = require("multer");
 const jwt = require("jsonwebtoken");
 const mailSend = require("./public/components/sendMail");
-const useri = require('./public/components/UserInfo');
+const useri = require("./public/components/UserInfo");
 const verifyotp = require("./public/components/verifyOtp");
+const statusu = require("./public/components/UpdateStatus");
+const showstatus = require("./public/components/showStatus");
 
 const imageStorage = multer.diskStorage({
   // Destination to store image
@@ -355,15 +357,73 @@ Router.post("/msglist", imageUpload.none(), (req, res) => {
 
 Router.post("/userinfo", imageUpload.none(), (req, res) => {
   let data = JSON.parse(JSON.stringify(req.body));
+  let { id } = data;
   let { username } = data;
-  useri.userinfo(username).then((output)=>{
-    res.json(output);
-  }).catch((err)=>{
-    res.json({
-      'error':true,
-      'message':err.message
+
+  useri
+    .userinfo(id, username)
+    .then((output) => {
+      res.json(output);
     })
-  })
+    .catch((err) => {
+      res.json({
+        error: true,
+        message: err.message,
+      });
+    });
+});
+
+Router.post("/user", imageUpload.none(), (req, res) => {
+  let data = JSON.parse(JSON.stringify(req.body));
+  let { id } = data;
+  let { username } = data;
+
+  
+
+  useri
+    .userinfo(id, username)
+    .then((output) => {
+      res.json(output);
+    })
+    .catch((err) => {
+      res.json({
+        error: true,
+        message: err.message,
+      });
+    });
+});
+
+Router.post("/UpdateStatus", imageUpload.none(), (req, res) => {
+  let data = JSON.parse(JSON.stringify(req.body));
+  let { username } = data;
+  let { status } = data;
+  let { date } = data;
+  statusu
+    .statusupdate(username, status, date)
+    .then((output) => {
+      res.json(output);
+    })
+    .catch((err) => {
+      res.json({
+        error: true,
+        msg: err.message,
+      });
+    });
+});
+
+Router.post("/showStatus/:id", (req, res) => {
+  let { id } = req.params;
+  showstatus
+    .showstatus(id)
+    .then((output) => {
+      res.json(output);
+    })
+    .catch((err) => {
+      res.json({
+        err: true,
+        msg: err.message,
+      });
+    });
 });
 
 //then call a file that will upload username to db and update new token

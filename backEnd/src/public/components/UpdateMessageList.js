@@ -50,7 +50,6 @@ const messageList = async (payload) =>{
         
         
     }catch(err){
-        console.log(err);
         updated = false
     }finally{
         // let result = {

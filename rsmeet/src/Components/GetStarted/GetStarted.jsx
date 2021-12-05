@@ -4,7 +4,6 @@ import {
   
 } from 'react-router-dom';
 import logo from '../../Assets/image/logoOne.svg.png';
-import Header from '../Header/Header';
 import './getStarted.css';
 
 const GetStarted = () => {

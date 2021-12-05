@@ -1,29 +1,15 @@
-import { useEffect, useState } from "react";
-import { useRouteMatch, useHistory } from "react-router-dom";
-import { getApiData } from "../../apis/api";
+
+import { useHistory } from "react-router-dom";
 import Badge from "./Badge";
 const List = ({ dp, name, time, userId, authorId, username,count,u,uname }) => {
   const history = useHistory();
-  const [lastValues, setlastValues] = useState([]);
-  let { url } = useRouteMatch();
   const openChats = () => {
     history.push(
       `/dashboard/home/${username}/chatlist/nt/${userId}/${authorId}`
     );
   };
 
-  // console.log(username);
 
-  const showLastMessage = () => {
-    // let url = "http://localhost:9000/login/msglist";
-    // let formData = new FormData();
-    // formData.append("id", id);
-    // getApiData(formData, url)
-  };
-
-  useEffect(() => {
-    showLastMessage();
-  }, [count,u]);
 
   return (
     <section
@@ -55,7 +41,7 @@ const List = ({ dp, name, time, userId, authorId, username,count,u,uname }) => {
         </section>
       </div>
     {
-      (userId === u  && username === uname) ? <Badge count={count} /> : console.log(userId,u)
+      (userId === u  && username === uname) ? <Badge count={count} /> : ""
     }
        {/* <span class="badge"style={{background:"red"}} >{count}</span> */}
     </section>

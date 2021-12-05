@@ -7,10 +7,8 @@ import { FiSend } from "react-icons/fi";
 import { AiOutlineClear } from "react-icons/ai";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { BiBlock } from "react-icons/bi";
-import { AiFillDelete } from "react-icons/ai";
 import { getApiData } from "../../apis/api";
 import io from "socket.io-client";
-import { nanoid } from "nanoid";
 
 // emoji picker
 
@@ -31,6 +29,8 @@ const Users = () => {
   const [height, setheight] = useState("");
   const [msglist, setmsglist] = useState([]);
 
+  const [Status, setStatus] = useState([]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let key = Date.now();
@@ -47,15 +47,6 @@ const Users = () => {
     };
 
     socket.emit("rsmeet", value);
-
-    // socket.on("newMsg", (payload) => {
-    //   console.log(payload);
-    // });
-    // msglist.push(value);
-
-    // socket.emit('join',value);
-
-    // setmsglist(msglist);
 
     setuserMsg({ ...userMsg, message: "" });
   };
@@ -85,10 +76,13 @@ const Users = () => {
   };
 
   const changeHeight = () => {
-    let p = document.querySelector(".emoji-mart").style.height;
-    height === "calc(100vh - 60px - 140px)"
-      ? setheight("100px")
-      : setheight("calc(100vh - 60px - 140px)");
+    let p = document.querySelector(".emoji-mart").offsetHeight;
+    // height === "calc(100vh - 60px - 140px)"
+    //   ? setheight(`calc(100vh-60px-${p})`)
+    //   : setheight("calc(100vh - 60px - 140px)");
+    emoji === "inline"
+      ? setheight(`calc(100vh - 70px - 140px - ${p}px)`)
+      : setheight(`calc(100vh - 60px - 140px)`);
   };
 
   const getMessage = () => {
@@ -102,9 +96,8 @@ const Users = () => {
       check.sort((a, b) => {
         return a.msgId - b.msgId;
       });
-      console.log(check);
+
       setmsglist(check);
-      //console.log(output);
       setuserDetails(output.user);
     });
   };
@@ -124,9 +117,26 @@ const Users = () => {
     getMessage();
   }, []);
 
-  // useEffect(() => {
+  const checkUserStatus = () => {
+    let url = `http://localhost:9000/login/showStatus/${id}`;
+    let formData = new FormData();
+    formData.append("id", id);
+    getApiData(formData, url)
+      .then((output) => {
+        //console.log(output.data[0]);
+        setStatus(output.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
 
-  // }, [ ])
+  useEffect(() => {
+    setInterval(() => checkUserStatus(), 10000);
+    return () => {
+      clearInterval();
+    };
+  }, []);
 
   return (
     <main
@@ -139,6 +149,7 @@ const Users = () => {
           setmodalDisplay={setmodal}
           name={userDetails.name}
           dp={userDetails.image}
+          status={Status}
         />
       </section>
 
@@ -256,14 +267,14 @@ const Users = () => {
             <span>block user</span>
           </button>
         </div>
-        <div className="d-flex flex-row options-div">
+        {/* <div className="d-flex flex-row options-div">
           <span>
             <AiFillDelete />
           </span>
           <button className="option-button">
             <span>delete user</span>
           </button>
-        </div>
+        </div> */}
       </section>
       {/* End here */}
     </main>

@@ -1,11 +1,9 @@
 import React from "react";
-import { useHistory,useRouteMatch } from "react-router-dom";
-import BlankDp from "../../Assets/image/blankDp.png";
+import { useHistory } from "react-router-dom";
 import { AiOutlineMore } from "react-icons/ai";
 
-const DashHeader = ({ id,count }) => {
+const DashHeader = ({ dp,id,count,onlineStatus }) => {
   let history = useHistory();
-  let { path, url } = useRouteMatch();
   const openProfileInfo = () =>{
     history.push(`/dashboard/home/profileinfo/${id}`);
   }
@@ -17,12 +15,13 @@ const DashHeader = ({ id,count }) => {
           <section className="profileImage py-2">
             <figure style={{ height: "50px", width: "50px" }}>
               <img
-                src={BlankDp}
-                alt="BlankDp to visualize user for chooseing Profile Picture"
+                src={dp}
+                alt="BlankDp "
               />
             </figure>
 
-            <span className="position-absolute onlineStatusShow"></span>
+            {onlineStatus ? <span className="position-absolute onlineStatusShow" ></span> : ''}
+            {/* <span className="position-absolute onlineStatusShow"></span> */}
           </section>
           <section className="d-flex align-items-center mt-3">
             <h6 style={{ color: "white" }}>{count > 0  ? `${count} new message` : `no new message` }</h6>

@@ -7,7 +7,7 @@ const OppositeUser = ({msg,time}) => {
           <figure className="mb-0" style={{ height: "30px", width: "30px" }}>
             <img
               src={BlankDp}
-              alt="BlankDp to visualize user for chooseing Profile Picture"
+              alt="BlankDp"
             />
           </figure>
         </div>

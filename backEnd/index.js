@@ -44,7 +44,6 @@ express.use('/login/r',login);
 
 
 io.on("connection",(socket)=>{
-    console.log('socket is activated to connect');
     socket.on("rsmeet",(payload)=>{
         //Upload to daatabase;
        

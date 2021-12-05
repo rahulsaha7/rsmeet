@@ -1,5 +1,4 @@
 import DashHeader from "../Header/DashHeader";
-import List from "./List";
 const DesktopView = ({ Chatlist }) => {
   return (
     <main

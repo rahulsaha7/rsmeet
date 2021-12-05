@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+
 import Header from "../Header/Header";
 
 const MailVerify = ({handleVerifyEmail,verifyEmailData,setverifyEmailData}) => {

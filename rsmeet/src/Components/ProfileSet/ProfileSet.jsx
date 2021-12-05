@@ -3,7 +3,6 @@ import { useHistory } from "react-router-dom";
 import Header from "../Header/Header";
 import { BsArrowRight } from "react-icons/bs";
 import { MdModeEdit } from "react-icons/md";
-import axios from "axios";
 import FormData from "form-data";
 import { getApiData } from "../../apis/api";
 import "./ProfileSet.css";
@@ -119,7 +118,7 @@ const ProfileSet = ({ regData, setregData,token,setcookies }) => {
           <figure>
             <img
               src={regData.dp}
-              alt="BlankDp to visualize user for chooseing Profile Picture"
+              alt="BlankDp"
             />
             <input
               type="file"

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Header from "../Header/Header";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 const ForgotPassword = ({getApiData}) => {
   const [forgotEmail, setforgotEmail] = useState({

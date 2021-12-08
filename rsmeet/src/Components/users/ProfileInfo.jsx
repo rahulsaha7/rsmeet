@@ -15,7 +15,7 @@ const ProfileInfo = ({ removecookies }) => {
     dp: "",
   });
 
-  const updateStatus = () =>{
+  const updateStatus = () => {
     let date;
     let url = "http://localhost:9000/login/UpdateStatus";
     let formData = new FormData();
@@ -36,13 +36,11 @@ const ProfileInfo = ({ removecookies }) => {
       .catch((err) => {
         console.log(err.message);
       });
-  }
-
+  };
 
   const LogOut = () => {
-   updateStatus();
-    removecookies("authToken",{path:'/'});
-   
+    updateStatus();
+    removecookies("authToken", { path: "/" });
 
     history.push(`/`);
   };
@@ -80,16 +78,7 @@ const ProfileInfo = ({ removecookies }) => {
               <span>{id}</span>
             </button>
           </div>
-          {/* <div className="d-flex flex-row options-div justify-content-center">
-            <button className="option-button ms-4">
-              <span>User Since : 18/05/2020</span>
-            </button>
-          </div>
-          <div className="d-flex flex-row options-div justify-content-center">
-            <span>
-              <ImBlocked />
-            </span>
-          </div> */}
+
           <div className="d-flex flex-row options-div justify-content-center">
             <span>
               <BiLogOut />

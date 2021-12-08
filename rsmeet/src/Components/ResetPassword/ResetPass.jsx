@@ -2,9 +2,14 @@ import React, { useState, useEffect } from "react";
 import Header from "../Header/Header";
 import { AiFillEye } from "react-icons/ai";
 import { getApiData } from "../../apis/api.js";
-import { Link,useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 
-const ResetPass = ({ rpdata, setrpdata, handleResetPasswordForm,rpMessage }) => {
+const ResetPass = ({
+  rpdata,
+  setrpdata,
+  handleResetPasswordForm,
+  rpMessage,
+}) => {
   const [viewPass, setviewPass] = useState("password");
   const [pdisplay, setpdisplay] = useState("none");
 
@@ -20,8 +25,6 @@ const ResetPass = ({ rpdata, setrpdata, handleResetPasswordForm,rpMessage }) => 
   const CheckKey = () => {
     let formData = new FormData();
     formData.append("token", key);
-
-    console.log(formData.get("token"));
 
     let url = "http://localhost:9000/login/verifyToken";
 
@@ -46,7 +49,7 @@ const ResetPass = ({ rpdata, setrpdata, handleResetPasswordForm,rpMessage }) => 
       <form
         action=""
         method="post"
-        onSubmit={(e) => handleResetPasswordForm(e,key)}
+        onSubmit={(e) => handleResetPasswordForm(e, key)}
       >
         <section className=" mt-3 ">
           <label className="form-label" htmlFor="password">
@@ -165,17 +168,15 @@ const ResetPass = ({ rpdata, setrpdata, handleResetPasswordForm,rpMessage }) => 
           </button>
         </section>
 
-        <p style={{display:rpMessage.display}}>
-        {rpMessage.message}
-        <span style={{display:rpMessage.loginDisplay}} >
-            <Link to='/Login' style={{color:"rgb(62, 236, 90)"}} >. Sign In </Link>
-        </span>
+        <p style={{ display: rpMessage.display }}>
+          {rpMessage.message}
+          <span style={{ display: rpMessage.loginDisplay }}>
+            <Link to="/Login" style={{ color: "rgb(62, 236, 90)" }}>
+              . Sign In{" "}
+            </Link>
+          </span>
         </p>
-        
-
       </form>
-
-
     </div>
   );
 };

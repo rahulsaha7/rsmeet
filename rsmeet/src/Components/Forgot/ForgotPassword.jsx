@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import Header from "../Header/Header";
 import { Link } from "react-router-dom";
 
-const ForgotPassword = ({getApiData}) => {
+const ForgotPassword = ({ getApiData }) => {
   const [forgotEmail, setforgotEmail] = useState({
     mail: "",
   });
 
   const [fpMessage, setfpMessage] = useState({
-    message : '',
-    display:"none",
-    loginDisplay:"none"
-  })
-
+    message: "",
+    display: "none",
+    loginDisplay: "none",
+  });
 
   const sendMail = (e) => {
     e.preventDefault();
@@ -20,14 +19,22 @@ const ForgotPassword = ({getApiData}) => {
     const formData = new FormData();
 
     formData.append("email", forgotEmail.mail);
-    let url = 'http://localhost:9000/login/sendMail';
+    let url = "http://localhost:9000/login/sendMail";
 
-    
-     getApiData(formData,url).then((res) => {
-      setfpMessage({message:'Mail will be sent if this mail id exist on our system',display:'block',loginDisplay:"none"});
+    getApiData(formData, url)
+      .then((res) => {
+        setfpMessage({
+          message: "Mail will be sent if this mail id exist on our system",
+          display: "block",
+          loginDisplay: "none",
+        });
       })
       .catch((error) => {
-        setfpMessage({message:"something went wrong",display:'block',loginDisplay:"inline-block"});
+        setfpMessage({
+          message: "something went wrong",
+          display: "block",
+          loginDisplay: "inline-block",
+        });
       });
   };
 
@@ -76,24 +83,19 @@ const ForgotPassword = ({getApiData}) => {
           </button>
         </section>
 
-        
-        <p className="mt-3" style={{display:fpMessage.display}}>
-        {fpMessage.message}
-        <span style={{display:fpMessage.loginDisplay}} >
-            <Link to='/Sign-Up' style={{color:"rgb(62, 236, 90)"}} >. Sign Up </Link>
-        </span>
+        <p className="mt-3" style={{ display: fpMessage.display }}>
+          {fpMessage.message}
+          <span style={{ display: fpMessage.loginDisplay }}>
+            <Link to="/Sign-Up" style={{ color: "rgb(62, 236, 90)" }}>
+              . Sign Up{" "}
+            </Link>
+          </span>
         </p>
-        
-
       </form>
 
       <Link className="mt-3" to="/Login" style={{ color: "#3EEC5A" }}>
         Back to Login
       </Link>
-
-
-
-
     </div>
   );
 };

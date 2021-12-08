@@ -28,13 +28,11 @@ const MobileView = () => {
   });
 
   socket.on("newMsg", (payload) => {
-    console.log(payload.output);
     if (payload.output.updated) {
       let c = newMsg.count;
       c = c + 1;
       let u = payload.payload.author;
       setnewMsg({ count: c, user: u, uname: payload.output.username });
-      // console.log(u);
     }
   });
 
@@ -45,7 +43,6 @@ const MobileView = () => {
     formData.append("id", username);
     getApiData(formData, url)
       .then((output) => {
-        // console.log(output);
         if (output.error) {
           setchatlist(output.data);
         } else {

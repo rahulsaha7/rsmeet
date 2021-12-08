@@ -267,16 +267,7 @@ const Users = () => {
             <span>block user</span>
           </button>
         </div>
-        {/* <div className="d-flex flex-row options-div">
-          <span>
-            <AiFillDelete />
-          </span>
-          <button className="option-button">
-            <span>delete user</span>
-          </button>
-        </div> */}
       </section>
-      {/* End here */}
     </main>
   );
 };

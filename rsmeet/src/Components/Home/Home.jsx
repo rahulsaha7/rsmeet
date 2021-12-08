@@ -184,7 +184,6 @@ const Home = ({ backImage }) => {
     let url = "http://localhost:9000/login/otpVerify";
     getApiData(formData, url)
       .then((output) => {
-        console.log(output);
         if (output.token) {
           setcookies("authToken", output.token, { path: "/" });
           history.push(`/dashboard/home/${authTokenValues.username}`);

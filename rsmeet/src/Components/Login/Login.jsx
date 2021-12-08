@@ -23,7 +23,6 @@ const Login = ({ LoginData, setLoginData, LoginForm }) => {
             username
           </label>
           <div className="usernameHolder p-3 d-flex justify-content-center">
-            {/* This restriction should in register page but I am cheking here only  */}
             <input
               className="form-control"
               type="email"

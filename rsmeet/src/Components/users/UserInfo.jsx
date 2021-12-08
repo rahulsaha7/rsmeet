@@ -21,9 +21,9 @@ const UserInfo = () => {
     display: "none",
   });
 
-  const [accnt,setaccnt] = useState({
-    display:"none"
-  })
+  const [accnt, setaccnt] = useState({
+    display: "none",
+  });
 
   // useEffect(() => {
   //     getuserInfo();
@@ -115,9 +115,14 @@ const UserInfo = () => {
           </button>
 
           <div className="d-flex flex-row options-div justify-content-center">
-            <button className="option-button me-4" onClick = {() =>accnt.display === "none"
+            <button
+              className="option-button me-4"
+              onClick={() =>
+                accnt.display === "none"
                   ? setaccnt({ ...accnt, display: "flex" })
-                  : setaccnt({ ...accnt, display: "none" })} >
+                  : setaccnt({ ...accnt, display: "none" })
+              }
+            >
               <span>Account Info</span>
             </button>
             <span>
@@ -129,8 +134,8 @@ const UserInfo = () => {
             className="justify-content-center align-items-center"
             style={{ display: accnt.display }}
           >
-            <p>{ `name : ${userinfo.name}` }</p>
-            <p>{ `since : ${userinfo.date}` }</p>
+            <p>{`name : ${userinfo.name}`}</p>
+            <p>{`since : ${userinfo.date}`}</p>
           </section>
         </div>
       </section>

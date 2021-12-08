@@ -254,69 +254,47 @@ Router.post("/checkUsername", imageUpload.none(), (req, res) => {
     });
 });
 
-Router.post("/ProfileSet", imageUpload.single("image"), (req, res) => {
+Router.post("/ProfileSet", imageUpload.none(), (req, res) => {
   let data = JSON.parse(JSON.stringify(req.body));
 
   let tokenR = data.token;
   let decode = jwt.decode(tokenR);
+  upuser
+    .updateU(data.username, decode.userID, data.image)
+    .then((output) => {
+      if (output.updated) {
+        //Create a token and return it with a message
+        let token = jwt.sign(
+          {
+            sub: "Auth JWT",
+            auth: true,
+            userID: decode.userID,
+            verified: true,
+            username: data.username,
+          },
+          "authJWT",
+          { algorithm: "HS256", expiresIn: "1d" }
+        );
 
-  //copy dp from image temp to dynamic folder
-
-  fs.copyFile(
-    `${req.file.path}`,
-    `./src/public/${decode.userID}/images/${req.file.filename}`,
-    (err) => {
-      if (err) {
+        res.json({
+          token: token,
+          updated: output.updated,
+        });
       } else {
-        //then remove the old file
-        fs.unlinkSync(`./${req.file.path}`);
-        //Then add username to database and update new jwt
-
-        upuser
-          .updateU(
-            data.username,
-            decode.userID,
-            `D:/Pu_Chat_App/Code/backEnd/src/public/${decode.userID}/images/${req.file.filename}`
-          )
-          .then((output) => {
-            if (output.updated) {
-              //Create a token and return it with a message
-
-              let token = jwt.sign(
-                {
-                  sub: "Auth JWT",
-                  auth: true,
-                  userID: decode.userID,
-                  verified: true,
-                  username: data.username,
-                  image: `./src/public/${decode.userID}/images/${req.file.filename}`,
-                },
-                "authJWT",
-                { algorithm: "HS256", expiresIn: "1d" }
-              );
-
-              res.json({
-                token: token,
-                updated: output.updated,
-              });
-            } else {
-              //return error with a message
-              res.json({
-                updated: false,
-                message: "Couldn't find the username",
-              });
-            }
-          })
-          .catch((err) => {
-            //return error with something went wrong while updating the username
-            res.json({
-              error: true,
-              message: err.message,
-            });
-          });
+        //return error with a message
+        res.json({
+          updated: false,
+          message: "Couldn't find the username",
+        });
       }
-    }
-  );
+    })
+    .catch((err) => {
+      //return error with something went wrong while updating the username
+      res.json({
+        error: true,
+        message: err.message,
+      });
+    });
 });
 
 Router.post("/chatlist", imageUpload.none(), (req, res) => {
@@ -377,8 +355,6 @@ Router.post("/user", imageUpload.none(), (req, res) => {
   let data = JSON.parse(JSON.stringify(req.body));
   let { id } = data;
   let { username } = data;
-
-  
 
   useri
     .userinfo(id, username)

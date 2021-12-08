@@ -1,15 +1,22 @@
-
 import { useHistory } from "react-router-dom";
 import Badge from "./Badge";
-const List = ({ dp, name, time, userId, authorId, username,count,u,uname }) => {
+const List = ({
+  dp,
+  name,
+  time,
+  userId,
+  authorId,
+  username,
+  count,
+  u,
+  uname,
+}) => {
   const history = useHistory();
   const openChats = () => {
     history.push(
       `/dashboard/home/${username}/chatlist/nt/${userId}/${authorId}`
     );
   };
-
-
 
   return (
     <section
@@ -21,7 +28,7 @@ const List = ({ dp, name, time, userId, authorId, username,count,u,uname }) => {
           <figure style={{ height: "50px", width: "50px" }}>
             <img src={dp} alt="dp" />
           </figure>
-          {/* <span className="position-relative onlinestatus"></span> */}
+          
         </section>
         <section className="d-flex align-items-center mt-3 flex-column ">
           <h6 style={{ color: "white" }}>{name}</h6>
@@ -40,10 +47,8 @@ const List = ({ dp, name, time, userId, authorId, username,count,u,uname }) => {
           {time}
         </section>
       </div>
-    {
-      (userId === u  && username === uname) ? <Badge count={count} /> : ""
-    }
-       {/* <span class="badge"style={{background:"red"}} >{count}</span> */}
+      {userId === u && username === uname ? <Badge count={count} /> : ""}
+      
     </section>
   );
 };

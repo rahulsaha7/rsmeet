@@ -7,15 +7,15 @@ import FormData from "form-data";
 import { getApiData } from "../../apis/api";
 import "./ProfileSet.css";
 
-const ProfileSet = ({ regData, setregData,token,setcookies }) => {
+const ProfileSet = ({ regData, setregData, token, setcookies }) => {
   const [err, seterr] = useState({
     errDisplay: "none",
     errMessage: "Size should be less then 500kb",
   });
 
   const [usernameExist, setusernameExist] = useState({
-    display:"none",
-    message:""
+    display: "none",
+    message: "",
   });
 
   let history = useHistory();
@@ -24,10 +24,6 @@ const ProfileSet = ({ regData, setregData,token,setcookies }) => {
     if (event.target.files[0].size > 541435) {
       seterr({ ...err, errDisplay: "inline" });
     } else {
-      //Only image data and username will be push to useState variable
-
-      //But first lets check Signup.jsx file
-
       setregData({
         name: regData.name,
         email: regData.email,
@@ -42,65 +38,86 @@ const ProfileSet = ({ regData, setregData,token,setcookies }) => {
     }
   };
 
-  const callRegistrationApi = () => {
-    
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      var reader = new FileReader();
+      reader.onload = function () {
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
 
+  const callRegistrationApi = () => {
+    let result = "";
     const formData = new FormData();
     formData.append("username", regData.username);
-    
-    formData.append('token',token);
-    if(regData.image===null){
-      formData.append("image","");
-    }else{
-      formData.append("image", regData.image[0], regData.image[0].name);
-    }
-    
-    let url = 'http://localhost:9000/login/ProfileSet';
-    getApiData(formData,url)
-      .then((res) => {
-        if(res.token){
-          setcookies("authToken", res.token, { path: "/" });
-          history.push(`/dashboard/home/${regData.username}`);
-        }else if(!res.updated){
-          alert(res.message);
-        }
-      })
-      .catch((err) => {
-       alert('something went wrong');
-      });
 
-   
+    formData.append("token", token);
+    if (regData.image === null) {
+      formData.append("image", "");
+    } else {
+      let image = regData.image[0];
+
+      let promise = getBase64(image);
+      promise.then((result) => {
+        formData.append("image", result);
+        // console.log(result);
+        let url = "http://localhost:9000/login/ProfileSet";
+        getApiData(formData, url)
+          .then((res) => {
+            if (res.token) {
+              setcookies("authToken", res.token, { path: "/" });
+              history.push(`/dashboard/home/${regData.username}`);
+            } else if (!res.updated) {
+              alert(res.message);
+            }
+          })
+          .catch((err) => {
+            alert("something went wrong");
+          });
+      });
+    }
   };
 
   const checkData = (e) => {
     e.preventDefault();
-    console.log(regData);
+
     callRegistrationApi();
   };
 
   const ProfileUploader = useRef(null);
 
-
   const CheckUsername = () => {
     let formData = new FormData();
-    formData.append('username',regData.username);
-    let url = 'http://localhost:9000/login/checkUsername';
-    getApiData(formData,url).then((output)=>{
-      console.log(output);
-        if(output.exist){
-          setusernameExist({display:"inline-block",message:"username is already taken"})
-        }else{
-          setusernameExist({display:"none",message:"username is already taken"});
+    formData.append("username", regData.username);
+    let url = "http://localhost:9000/login/checkUsername";
+    getApiData(formData, url)
+      .then((output) => {
+        // console.log(output);
+        if (output.exist) {
+          setusernameExist({
+            display: "inline-block",
+            message: "username is already taken",
+          });
+        } else {
+          setusernameExist({
+            display: "none",
+            message: "username is already taken",
+          });
         }
-    }).catch((error)=>{
-      setusernameExist({display:"inline-block",message:"Something went wrong"});
-    })
-  }
+      })
+      .catch((error) => {
+        setusernameExist({
+          display: "inline-block",
+          message: "Something went wrong",
+        });
+      });
+  };
 
   useEffect(() => {
-    
     CheckUsername();
-    
   }, [regData.username]);
 
   return (
@@ -116,10 +133,7 @@ const ProfileSet = ({ regData, setregData,token,setcookies }) => {
       >
         <section className="profileImage w-100 d-flex justify-content-center mt-3 p-2">
           <figure>
-            <img
-              src={regData.dp}
-              alt="BlankDp"
-            />
+            <img src={regData.dp} alt="BlankDp" />
             <input
               type="file"
               hidden
@@ -134,8 +148,8 @@ const ProfileSet = ({ regData, setregData,token,setcookies }) => {
                 uploadHandler(event);
               }}
               required
-              onInvalid = {(e)=>{
-                e.target.setCustomValidity(alert('hey upload image'))
+              onInvalid={(e) => {
+                e.target.setCustomValidity(alert("hey upload image"));
               }}
             />
           </figure>
@@ -185,9 +199,10 @@ const ProfileSet = ({ regData, setregData,token,setcookies }) => {
           </div>
         </section>
 
-
-        <span style={{ color: "red",display:usernameExist.display}}> {usernameExist.message} </span>
-        
+        <span style={{ color: "red", display: usernameExist.display }}>
+          {" "}
+          {usernameExist.message}{" "}
+        </span>
 
         <section className="w-100 " style={{ textAlign: "right" }}>
           <button className="py-2 px-3 signInButton mt-3" type="submit">

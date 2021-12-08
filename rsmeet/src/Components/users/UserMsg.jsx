@@ -1,4 +1,4 @@
-const UserMsg = ({msg,time}) => {
+const UserMsg = ({ msg, time }) => {
   return (
     <>
       <section className="profileImage py-2 d-flex flex-row-reverse">

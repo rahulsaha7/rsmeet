@@ -6,7 +6,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { getApiData } from "../../apis/api";
 import useOnlineStatus from "@rehooks/online-status";
 
-const ProfileInfo = ({ removecookies }) => {
+const ProfileInfo = ({ removecookies, setAuthToken }) => {
   let history = useHistory();
   let { id } = useParams();
   const onlineStatus = useOnlineStatus();
@@ -39,10 +39,13 @@ const ProfileInfo = ({ removecookies }) => {
   };
 
   const LogOut = () => {
-    updateStatus();
-    removecookies("authToken", { path: "/" });
-
-    history.push(`/`);
+    if (window.confirm) {
+      updateStatus();
+      localStorage.removeItem("authToken");
+      removecookies("usecaseshow2y2", { path: "/" });
+      // window.location.reload();
+      history.push(`/`);
+    }
   };
 
   useEffect(() => {

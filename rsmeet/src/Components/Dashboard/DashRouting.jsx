@@ -5,7 +5,7 @@ import Dashboard from "./Dashboard";
 import UserInfo from "../users/UserInfo";
 import ProfileInfo from "../users/ProfileInfo";
 
-const DashRouting = ({ AuthTokenValues, removecookies }) => {
+const DashRouting = ({ removecookies }) => {
   return (
     <>
       <Switch>

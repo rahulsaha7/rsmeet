@@ -110,6 +110,9 @@ const UserInfo = () => {
           <button
             className="option-button w-100 me-4 justify-content-center"
             style={{ display: ruser.display }}
+            onClick={() => {
+              alert("Reporting for user will be eneabaled soon");
+            }}
           >
             <span>Report</span>
           </button>
@@ -131,7 +134,7 @@ const UserInfo = () => {
           </div>
 
           <section
-            className="justify-content-center align-items-center"
+            className="flex-column justify-content-center align-items-center"
             style={{ display: accnt.display }}
           >
             <p>{`name : ${userinfo.name}`}</p>

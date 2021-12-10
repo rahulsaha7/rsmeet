@@ -6,8 +6,9 @@ import { MdModeEdit } from "react-icons/md";
 import FormData from "form-data";
 import { getApiData } from "../../apis/api";
 import "./ProfileSet.css";
+import Jwt from "jsonwebtoken";
 
-const ProfileSet = ({ regData, setregData, token, setcookies }) => {
+const ProfileSet = ({ regData, setregData, setauthTokenValues }) => {
   const [err, seterr] = useState({
     errDisplay: "none",
     errMessage: "Size should be less then 500kb",
@@ -54,7 +55,7 @@ const ProfileSet = ({ regData, setregData, token, setcookies }) => {
     const formData = new FormData();
     formData.append("username", regData.username);
 
-    formData.append("token", token);
+    formData.append("token", localStorage.getItem("authToken"));
     if (regData.image === null) {
       formData.append("image", "");
     } else {
@@ -63,13 +64,20 @@ const ProfileSet = ({ regData, setregData, token, setcookies }) => {
       let promise = getBase64(image);
       promise.then((result) => {
         formData.append("image", result);
-        // console.log(result);
         let url = "http://localhost:9000/login/ProfileSet";
         getApiData(formData, url)
           .then((res) => {
-            if (res.token) {
-              setcookies("authToken", res.token, { path: "/" });
-              history.push(`/dashboard/home/${regData.username}`);
+            if (res.updated) {
+              localStorage.setItem("authToken", res.token);
+              Jwt.verify(res.token, process.env.REACT_APP_JWT_CODE);
+
+              let decode2 = Jwt.decode(res.token);
+              setauthTokenValues({
+                auth: decode2.auth,
+                username: decode2.username,
+                verified: decode2.verified,
+              });
+              history.push(`/dashboard/home/${decode2.username}`);
             } else if (!res.updated) {
               alert(res.message);
             }
@@ -147,10 +155,10 @@ const ProfileSet = ({ regData, setregData, token, setcookies }) => {
               onChange={(event) => {
                 uploadHandler(event);
               }}
-              required
-              onInvalid={(e) => {
-                e.target.setCustomValidity(alert("hey upload image"));
-              }}
+              // required
+              // onInvalid={(e) => {
+              //   e.target.setCustomValidity(alert("hey upload image"));
+              // }}
             />
           </figure>
 

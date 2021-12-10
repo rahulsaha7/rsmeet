@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Badge from "./Badge";
+import { getApiData } from "../../apis/api";
 const List = ({
   dp,
   name,
@@ -10,13 +12,37 @@ const List = ({
   count,
   u,
   uname,
+  msg,
 }) => {
+  const [lastMessage, setlastMessage] = useState([]);
   const history = useHistory();
   const openChats = () => {
     history.push(
       `/dashboard/home/${username}/chatlist/nt/${userId}/${authorId}`
     );
   };
+
+  const getLastMessage = () => {
+    let url = "http://localhost:9000/login/lastMessage";
+    let formData = new FormData();
+    formData.append("username", username);
+    formData.append("userid", userId);
+    getApiData(formData, url)
+      .then((output) => {
+        if (output.error) {
+          console.log(output);
+        } else {
+          setlastMessage(output.data.body);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getLastMessage();
+  }, []);
 
   return (
     <section
@@ -28,7 +54,6 @@ const List = ({
           <figure style={{ height: "50px", width: "50px" }}>
             <img src={dp} alt="dp" />
           </figure>
-          
         </section>
         <section className="d-flex align-items-center mt-3 flex-column ">
           <h6 style={{ color: "white" }}>{name}</h6>
@@ -36,7 +61,7 @@ const List = ({
             className="text-truncate"
             style={{ color: "#c4bebe", maxWidth: "100px" }}
           >
-            last sent message will be displayed here
+            {lastMessage ? lastMessage : msg}
           </p>
         </section>
 
@@ -48,7 +73,6 @@ const List = ({
         </section>
       </div>
       {userId === u && username === uname ? <Badge count={count} /> : ""}
-      
     </section>
   );
 };

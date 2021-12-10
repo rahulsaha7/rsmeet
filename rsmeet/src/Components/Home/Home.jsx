@@ -64,7 +64,8 @@ const Home = ({ backImage }) => {
     password: "",
   });
 
-  const [cookies, setcookies, removeCookies] = useCookies(["authToken"]);
+  const [cookies, setcookies, removeCookies] = useCookies(["usecaseshow2y2"]);
+  const [authToken, setAuthToken] = useState(localStorage.getItem("authToken"));
 
   const history = useHistory();
   let historyChanged = false;
@@ -81,15 +82,25 @@ const Home = ({ backImage }) => {
     getApiData(formData, url).then((output) => {
       setLoginData({ username: "", password: "" });
       if (output.token) {
-        setcookies("authToken", output.token, { path: "/" });
+        //console.log(output.token);
+        let decode = jwt.decode(output.token);
+        setcookies("usecaseshow2y2", "cdabe", { path: "/" });
+        localStorage.setItem("authToken", output.token);
         setverifyEmailData({ ...verifyEmailData, email: LoginData.username });
-        history.push(`/dashboard/home/${authTokenValues.username}`);
+        jwt.verify(output.token, process.env.REACT_APP_JWT_CODE);
+
+        let decode2 = jwt.decode(output.token);
+        setauthTokenValues({
+          auth: decode2.auth,
+          username: decode2.username,
+          verified: decode2.verified,
+        });
+
+        history.push(`/dashboard/home/${decode2.username}`);
       } else {
         alert(output.Message);
       }
     });
-
-    //setLoginData({username:"",password:""});
   };
 
   const isRegDetails = () => {
@@ -111,7 +122,8 @@ const Home = ({ backImage }) => {
       const data = output;
 
       if (data.token) {
-        setcookies("authToken", output.token, { path: "/" });
+        setcookies("usecaseshow2y2", "cdaabe", { path: "/" });
+        localStorage.setItem("authToken", output.token);
         setregData({
           name: "",
           email: "",
@@ -123,8 +135,17 @@ const Home = ({ backImage }) => {
           dp: BlankDp,
         });
         setverifyEmailData({ ...verifyEmailData, email: regData.email });
+        jwt.verify(output.token, process.env.REACT_APP_JWT_CODE);
 
-        history.push(`/dashboard/home/${authTokenValues.username}`);
+        let decode2 = jwt.decode(output.token);
+        setauthTokenValues({
+          auth: decode2.auth,
+          username: decode2.username,
+          verified: decode2.verified,
+        });
+        history.push(`/dashboard/home/${decode2.username}`);
+
+        // history.push(`/dashboard/home/${authTokenValues.username}`);
       } else {
         alert(data.Message);
       }
@@ -205,11 +226,13 @@ const Home = ({ backImage }) => {
   };
 
   const CheckIfLoggedin = () => {
-    if (cookies.authToken) {
+    let authToken = localStorage.getItem("authToken");
+    // console.log(authTokenValues);
+    if (cookies.usecaseshow2y2) {
       try {
-        jwt.verify(cookies.authToken, process.env.REACT_APP_JWT_CODE);
+        jwt.verify(authToken, process.env.REACT_APP_JWT_CODE);
 
-        let decode = jwt.decode(cookies.authToken);
+        let decode = jwt.decode(authToken);
         setauthTokenValues({
           auth: decode.auth,
           username: decode.username,
@@ -229,13 +252,13 @@ const Home = ({ backImage }) => {
         username: "",
         verified: false,
       });
-      history.push("/");
+      //  history.push("/");
     }
   };
 
   useEffect(() => {
     CheckIfLoggedin();
-  }, [historyChanged, cookies.authToken]);
+  }, [historyChanged, cookies.usecaseshow2y2]);
 
   return (
     <>
@@ -276,7 +299,11 @@ const Home = ({ backImage }) => {
             </Route>
 
             <Route exact path="/Forgot-Password">
-              <ForgotPassword getApiData={getApiData} />
+              {!authTokenValues.auth ? (
+                <ForgotPassword getApiData={getApiData} />
+              ) : (
+                <Redirect to={`/dashboard/home/${authTokenValues.username}`} />
+              )}
             </Route>
 
             <Route exact path="/verify-mail">
@@ -307,8 +334,7 @@ const Home = ({ backImage }) => {
                 <ProfileSet
                   regData={regData}
                   setregData={setregData}
-                  token={cookies.authToken}
-                  setcookies={setcookies}
+                  setauthTokenValues={setauthTokenValues}
                 />
               ) : (
                 <Redirect to={`/dashboard/home/${authTokenValues.username}`} />
@@ -322,13 +348,6 @@ const Home = ({ backImage }) => {
                 <Redirect to="/Profile-set" />
               )}
             </Route>
-
-            {/* <Route path="/dashboard/home">
-              <DashRouting
-               
-                removecookies={removeCookies}
-              />
-            </Route> */}
 
             <Route exact path="/dashboard/home">
               <Redirect to={`/dashboard/home/${authTokenValues.username}`} />

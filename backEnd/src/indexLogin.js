@@ -1,7 +1,7 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
-const crypto = require("crypto");
-const fs = require("fs");
+// const bcrypt = require("bcrypt");
+// const crypto = require("crypto");
+// const fs = require("fs");
 const Router = express.Router();
 const reg = require("./public/components/Reg");
 const login = require("./public/components/login");
@@ -17,6 +17,8 @@ const useri = require("./public/components/UserInfo");
 const verifyotp = require("./public/components/verifyOtp");
 const statusu = require("./public/components/UpdateStatus");
 const showstatus = require("./public/components/showStatus");
+const lst = require("./public/components/lastMessage");
+const block = require("./public/components/blockUser");
 
 const imageStorage = multer.diskStorage({
   // Destination to store image
@@ -258,7 +260,9 @@ Router.post("/ProfileSet", imageUpload.none(), (req, res) => {
   let data = JSON.parse(JSON.stringify(req.body));
 
   let tokenR = data.token;
+
   let decode = jwt.decode(tokenR);
+
   upuser
     .updateU(data.username, decode.userID, data.image)
     .then((output) => {
@@ -397,6 +401,59 @@ Router.post("/showStatus/:id", (req, res) => {
     .catch((err) => {
       res.json({
         err: true,
+        msg: err.message,
+      });
+    });
+});
+
+Router.post("/lastMessage", imageUpload.none(), (req, res) => {
+  let data = JSON.parse(JSON.stringify(req.body));
+  let { username } = data;
+  let { userid } = data;
+  lst
+    .lastmsg(username, userid)
+    .then((output) => {
+      res.json(output);
+    })
+    .catch((err) => {
+      res.json({
+        error: true,
+        msg: err.message,
+      });
+    });
+});
+
+Router.post("/blockUser", imageUpload.none(), (req, res) => {
+  let data = JSON.parse(JSON.stringify(req.body));
+  let { id } = data;
+  let { aid } = data;
+
+  block.block
+    .blockUser(id, aid)
+    .then((output) => {
+      res.json(output);
+    })
+    .catch((err) => {
+      res.json({
+        error: true,
+        msg: err.message,
+      });
+    });
+});
+
+Router.post("/unblockUser", imageUpload.none(), (req, res) => {
+  let data = JSON.parse(JSON.stringify(req.body));
+  let { id } = data;
+  let { aid } = data;
+
+  block.block
+    .unblockUser(id, aid)
+    .then((output) => {
+      res.json(output);
+    })
+    .catch((err) => {
+      res.json({
+        error: true,
         msg: err.message,
       });
     });

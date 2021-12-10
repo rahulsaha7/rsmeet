@@ -31,6 +31,45 @@ const Users = () => {
 
   const [Status, setStatus] = useState([]);
 
+  const [blkDisplay, setblkDisplay] = useState({
+    blocked: false,
+  });
+  const blockUser = () => {
+    if (window.confirm("are you sure !")) {
+      let url = "http://localhost:9000/login/blockUser";
+      let formData = new FormData();
+      formData.append("id", id);
+      formData.append("aid", aId);
+      getApiData(formData, url)
+        .then((output) => {
+          if (output.updated) {
+            setblkDisplay({ blocked: true });
+          }
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
+  };
+
+  const unblockUser = () => {
+    if (window.confirm("are you sure !")) {
+      let url = "http://localhost:9000/login/unblockUser";
+      let formData = new FormData();
+      formData.append("id", id);
+      formData.append("aid", aId);
+      getApiData(formData, url)
+        .then((output) => {
+          if (output.updated) {
+            setblkDisplay({ blocked: false });
+          }
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let key = Date.now();
@@ -58,12 +97,10 @@ const Users = () => {
     formData.append("aid", aId);
     formData.append("type", type);
     getApiData(formData, url).then((output) => {
-      // console.log(output.data);
       let check = output.data;
       check.sort((a, b) => {
         return a.msgId - b.msgId;
       });
-      // console.log(check);
       setmsglist(check);
     });
   });
@@ -77,9 +114,6 @@ const Users = () => {
 
   const changeHeight = () => {
     let p = document.querySelector(".emoji-mart").offsetHeight;
-    // height === "calc(100vh - 60px - 140px)"
-    //   ? setheight(`calc(100vh-60px-${p})`)
-    //   : setheight("calc(100vh - 60px - 140px)");
     emoji === "inline"
       ? setheight(`calc(100vh - 70px - 140px - ${p}px)`)
       : setheight(`calc(100vh - 60px - 140px)`);
@@ -96,7 +130,9 @@ const Users = () => {
       check.sort((a, b) => {
         return a.msgId - b.msgId;
       });
-
+      if (output.blocked) {
+        setblkDisplay({ ...blkDisplay, blocked: output.blocked });
+      }
       setmsglist(check);
       setuserDetails(output.user);
     });
@@ -123,7 +159,6 @@ const Users = () => {
     formData.append("id", id);
     getApiData(formData, url)
       .then((output) => {
-        //console.log(output.data[0]);
         setStatus(output.data);
       })
       .catch((err) => {
@@ -179,6 +214,8 @@ const Users = () => {
               <h5>start a new chat</h5>
             )}
 
+            {blkDisplay.blocked ? "can't send message as user is blocked" : ""}
+
             {/* Section for auto scroll to bottom */}
 
             <section ref={titleRef} id="chatBottom"></section>
@@ -202,6 +239,7 @@ const Users = () => {
                   value={userMsg.message}
                   placeholder="Type your text here"
                   aria-label="Amount (to the nearest dollar)"
+                  disabled={blkDisplay.blocked}
                   style={{
                     background: "none",
                     border: "none",
@@ -259,12 +297,36 @@ const Users = () => {
             <span>clear chat</span>
           </button>
         </div>
-        <div className="d-flex flex-row options-div">
+        <div
+          className=" flex-row options-div"
+          style={{
+            display: blkDisplay.blocked ? "none" : "flex",
+          }}
+        >
           <span>
             <BiBlock />
           </span>
-          <button className="option-button">
+          <button
+            className="option-button"
+            onClick={() => {
+              blockUser();
+            }}
+          >
             <span>block user</span>
+          </button>
+        </div>
+
+        <div
+          className="flex-row options-div"
+          style={{
+            display: blkDisplay.blocked ? "flex" : "none",
+          }}
+        >
+          <span>
+            <BiBlock />
+          </span>
+          <button className="option-button" onClick={() => unblockUser()}>
+            <span>unblock</span>
           </button>
         </div>
       </section>

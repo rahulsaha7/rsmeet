@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { Switch, Route, useRouteMatch, useParams } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  useRouteMatch,
+  useParams,
+  useHistory,
+} from "react-router-dom";
 import DashHeader from "../Header/DashHeader";
 import List from "./List";
 import { getApiData } from "../../apis/api";
@@ -21,10 +27,13 @@ const MobileView = () => {
     dp: "",
   });
 
+  const history2 = useHistory();
+
   const [newMsg, setnewMsg] = useState({
     count: 0,
     user: "",
     uname: "",
+    msg: "",
   });
 
   socket.on("newMsg", (payload) => {
@@ -32,9 +41,22 @@ const MobileView = () => {
       let c = newMsg.count;
       c = c + 1;
       let u = payload.payload.author;
-      setnewMsg({ count: c, user: u, uname: payload.output.username });
+      setnewMsg({
+        count: c,
+        user: u,
+        uname: payload.output.username,
+        msg: payload.payload.body,
+      });
     }
   });
+
+  const checkLoggedin = () => {
+    let authToken3 = localStorage.getItem("authToken");
+
+    if (!authToken3) {
+      history2.push("/");
+    }
+  };
 
   useEffect(() => {
     let url = "http://localhost:9000/login/chatlist";
@@ -51,7 +73,7 @@ const MobileView = () => {
         }
       })
       .catch((err) => {
-        console.lof(err.message);
+        console.log(err.message);
       });
   }, [path, username]);
 
@@ -79,6 +101,7 @@ const MobileView = () => {
   }, [onlineStatus]);
 
   useEffect(() => {
+    checkLoggedin();
     let url = "http://localhost:9000/login/user";
     let formData = new FormData();
     formData.append("username", username);
@@ -88,6 +111,10 @@ const MobileView = () => {
       })
       .catch((error) => {});
   }, [username]);
+
+  // useEffect(() => {
+  //   checkLoggedin();
+  // }, []);
 
   return (
     <>
@@ -121,6 +148,7 @@ const MobileView = () => {
                     count={newMsg.count}
                     u={newMsg.user}
                     uname={newMsg.uname}
+                    msg={newMsg.msg}
                   />
                 ))}
               </div>

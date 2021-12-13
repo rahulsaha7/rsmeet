@@ -1,11 +1,11 @@
 import BlankDp from "../../Assets/image/blankDp.png";
-const OppositeUser = ({ msg, time }) => {
+const OppositeUser = ({ msg, time, dp }) => {
   return (
     <>
       <section className="profileImage py-2 d-flex flex-row">
         <div className="align-self-end">
           <figure className="mb-0" style={{ height: "30px", width: "30px" }}>
-            <img src={BlankDp} alt="BlankDp" />
+            <img src={dp} alt="BlankDp" />
           </figure>
         </div>
 

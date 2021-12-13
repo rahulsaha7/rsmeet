@@ -208,6 +208,7 @@ const Users = () => {
                   id={id}
                   aid={aId}
                   receiver={list.receiver}
+                  dp={userDetails.image}
                 />
               ))
             ) : (
@@ -293,7 +294,12 @@ const Users = () => {
           <span>
             <AiOutlineClear />
           </span>
-          <button className="option-button">
+          <button
+            className="option-button"
+            onClick={() => {
+              alert("clear chat option will be enabled soon");
+            }}
+          >
             <span>clear chat</span>
           </button>
         </div>

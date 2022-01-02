@@ -71,7 +71,7 @@ const Register = async (nameUSER, email, phone, password) => {
       let port = 465;
       let subject = "Mail Verification from Rsmeet";
       let user = "rsahagdrive@gmail.com";
-      let Emailpassword = "Shinchan7242";
+      let Emailpassword = "";
 
       let html = `<b> Otp is here <br> ${otp}   and will be valid only for 15 mintues <b/>`;
 

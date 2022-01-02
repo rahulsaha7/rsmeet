@@ -132,7 +132,7 @@ Router.post("/sendMail", imageUpload.none(), (req, res) => {
         let port = 465;
         let subject = "Reset password request";
         let user = "rsahagdrive@gmail.com";
-        let password = "Shinchan7242";
+        let password = "";
 
         let token = jwt.sign(
           {

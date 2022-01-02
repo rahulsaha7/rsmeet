@@ -34,6 +34,9 @@ const Users = () => {
   const [blkDisplay, setblkDisplay] = useState({
     blocked: false,
   });
+  const [blocker, setblocker] = useState({
+    blc: "",
+  });
   const blockUser = () => {
     if (window.confirm("are you sure !")) {
       let url = "http://localhost:9000/login/blockUser";
@@ -44,6 +47,7 @@ const Users = () => {
         .then((output) => {
           if (output.updated) {
             setblkDisplay({ blocked: true });
+            setblocker({ ...blocker, blc: aId });
           }
         })
         .catch((err) => {
@@ -62,6 +66,7 @@ const Users = () => {
         .then((output) => {
           if (output.updated) {
             setblkDisplay({ blocked: false });
+            setblocker({ ...blocker, blc: "" });
           }
         })
         .catch((err) => {
@@ -130,8 +135,10 @@ const Users = () => {
       check.sort((a, b) => {
         return a.msgId - b.msgId;
       });
-      if (output.blocked) {
-        setblkDisplay({ ...blkDisplay, blocked: output.blocked });
+      console.log(output.blocker);
+      if (output.blocked || output.blocked2) {
+        setblkDisplay({ ...blkDisplay, blocked: true });
+        setblocker({ ...blocker, blc: output.blocker });
       }
       setmsglist(check);
       setuserDetails(output.user);
@@ -325,7 +332,7 @@ const Users = () => {
         <div
           className="flex-row options-div"
           style={{
-            display: blkDisplay.blocked ? "flex" : "none",
+            display: blocker.blc === aId ? "flex" : "none",
           }}
         >
           <span>

@@ -42,12 +42,16 @@ const msglist = async (id, aid, type) => {
   let error = false;
   let data;
   let user;
-  let blocklist;
+  let blocker;
   let blocked = false;
+  let blocked2;
+
   try {
-    const docs = await Schemas.schemaA.conve.find({ userID: id });
+    const docs = await Schemas.schemaA.conve.find({ userID: aid });
     const docs2 = await Schemas.schemaA.register.find({ _id: id });
-    const docs3 = await Schemas.schemaA.conve.find({ userID: aid });
+    const docs3 = await Schemas.schemaA.conve.find({ userID: id });
+    const docs4 = await Schemas.schemaA.conve.find({ userID: aid });
+
     if (docs.length) {
       exist = true;
       if (type === "ps") {
@@ -63,8 +67,15 @@ const msglist = async (id, aid, type) => {
       };
 
       if (docs3[0].blockList.length > 0) {
-        if (docs3[0].blockList.includes(id)) {
+        if (docs3[0].blockList.includes(aid)) {
           blocked = true;
+          blocker = id;
+        }
+      }
+      if (docs4[0].blockList.length > 0) {
+        if (docs4[0].blockList.includes(id)) {
+          blocked2 = true;
+          blocker = aid;
         }
       }
     } else {
@@ -82,6 +93,8 @@ const msglist = async (id, aid, type) => {
       data: data,
       user: user,
       blocked: blocked,
+      blocked2: blocked2,
+      blocker: blocker,
     };
     return result;
   }
